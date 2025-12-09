@@ -1,0 +1,350 @@
+/* 博客页面样式 */
+.blog-intro {
+    text-align: center;
+    max-width: 800px;
+    margin: 0 auto 40px;
+    color: #bbdefb;
+    font-size: 1.1rem;
+}
+
+/* 博客控制栏 */
+.blog-controls {
+    background-color: rgba(25, 30, 70, 0.6);
+    border-radius: 10px;
+    padding: 20px;
+    margin-bottom: 30px;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    align-items: center;
+    gap: 20px;
+}
+
+.search-box {
+    position: relative;
+    flex: 1;
+    min-width: 250px;
+}
+
+.search-box input {
+    width: 100%;
+    padding: 12px 20px 12px 45px;
+    background-color: rgba(15, 20, 50, 0.8);
+    border: 1px solid rgba(100, 150, 255, 0.3);
+    border-radius: 8px;
+    color: #e0e7ff;
+    font-size: 1rem;
+    transition: all 0.3s ease;
+}
+
+.search-box input:focus {
+    outline: none;
+    border-color: #64b5f6;
+    box-shadow: 0 0 0 2px rgba(100, 181, 246, 0.2);
+}
+
+.search-box i {
+    position: absolute;
+    left: 15px;
+    top: 50%;
+    transform: translateY(-50%);
+    color: #90caf9;
+}
+
+.filter-tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+}
+
+.tag-filter {
+    background-color: rgba(100, 150, 255, 0.1);
+    color: #bbdefb;
+    border: 1px solid rgba(100, 150, 255, 0.3);
+    padding: 8px 16px;
+    border-radius: 20px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    font-size: 0.9rem;
+    font-weight: 500;
+}
+
+.tag-filter:hover {
+    background-color: rgba(100, 150, 255, 0.2);
+    transform: translateY(-2px);
+}
+
+.tag-filter.active {
+    background-color: #1a237e;
+    color: white;
+    border-color: #64b5f6;
+}
+
+/* 博客文章容器 */
+.blog-posts {
+    display: flex;
+    flex-direction: column;
+    gap: 30px;
+}
+
+/* 博客文章样式 */
+.blog-post {
+    background-color: rgba(25, 30, 70, 0.6);
+    border-radius: 12px;
+    padding: 30px;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+    border-left: 5px solid #64ffda;
+    transition:
+        transform 0.3s ease,
+        box-shadow 0.3s ease;
+}
+
+.blog-post:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.3);
+}
+
+.post-header {
+    margin-bottom: 20px;
+}
+
+.blog-post h3 {
+    color: #64ffda;
+    margin-bottom: 10px;
+    font-size: 1.6rem;
+    text-align: left;
+}
+
+.post-meta {
+    display: flex;
+    gap: 20px;
+    color: #90caf9;
+    font-size: 0.9rem;
+}
+
+.post-meta span {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+}
+
+.post-content-preview {
+    margin-bottom: 25px;
+    line-height: 1.7;
+}
+
+.post-content-preview p {
+    color: #e0e7ff;
+    font-size: 1.05rem;
+}
+
+.post-footer {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 15px;
+    padding-top: 20px;
+    border-top: 1px solid rgba(100, 150, 255, 0.2);
+}
+
+.post-tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+}
+
+.tag {
+    background-color: rgba(100, 150, 255, 0.15);
+    color: #bbdefb;
+    padding: 5px 12px;
+    border-radius: 15px;
+    font-size: 0.85rem;
+    font-weight: 500;
+}
+
+.read-more-btn {
+    background: linear-gradient(to right, #1a237e, #283593);
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 8px;
+    cursor: pointer;
+    font-weight: 600;
+    font-size: 0.95rem;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    transition: all 0.3s ease;
+}
+
+.read-more-btn:hover {
+    background: linear-gradient(to right, #283593, #3949ab);
+    transform: translateY(-2px);
+    box-shadow: 0 5px 15px rgba(26, 35, 126, 0.4);
+}
+
+.read-more-btn.active {
+    background: linear-gradient(to right, #283593, #3949ab);
+}
+
+/* 完整文章内容 */
+.post-full-content {
+    margin-top: 30px;
+    padding-top: 30px;
+    border-top: 1px solid rgba(100, 150, 255, 0.2);
+    animation: fadeIn 0.5s ease;
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+    }
+
+    to {
+        opacity: 1;
+    }
+}
+
+.post-full-content h4 {
+    color: #64b5f6;
+    margin: 25px 0 15px;
+    font-size: 1.3rem;
+}
+
+.post-full-content p {
+    margin-bottom: 15px;
+    line-height: 1.7;
+}
+
+/* 加载状态 */
+.loading-state {
+    text-align: center;
+    padding: 60px 20px;
+}
+
+.spinner {
+    width: 50px;
+    height: 50px;
+    border: 3px solid rgba(100, 150, 255, 0.3);
+    border-top-color: #64b5f6;
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
+    margin: 0 auto 20px;
+}
+
+@keyframes spin {
+    to {
+        transform: rotate(360deg);
+    }
+}
+
+.loading-state p {
+    color: #90caf9;
+    font-size: 1.1rem;
+}
+
+/* 错误状态 */
+.error-state {
+    text-align: center;
+    padding: 60px 20px;
+    color: #ff6b6b;
+}
+
+.error-state i {
+    font-size: 3rem;
+    margin-bottom: 20px;
+}
+
+.error-state h3 {
+    color: #ff6b6b;
+    margin-bottom: 15px;
+}
+
+.error-state p {
+    color: #e0e7ff;
+    margin-bottom: 25px;
+}
+
+.retry-btn {
+    background-color: #1a237e;
+    color: white;
+    border: none;
+    padding: 10px 25px;
+    border-radius: 8px;
+    cursor: pointer;
+    font-weight: 600;
+    transition: all 0.3s ease;
+}
+
+.retry-btn:hover {
+    background-color: #283593;
+    transform: translateY(-2px);
+}
+
+/* 无结果状态 */
+.no-results {
+    text-align: center;
+    padding: 60px 20px;
+    color: #90caf9;
+}
+
+.no-results i {
+    font-size: 3rem;
+    margin-bottom: 20px;
+    color: #64b5f6;
+}
+
+.no-results h3 {
+    color: #bbdefb;
+    margin-bottom: 15px;
+}
+
+.no-results p {
+    color: #90caf9;
+}
+
+/* 博客统计 */
+.blog-stats {
+    text-align: center;
+    margin-top: 40px;
+    padding-top: 20px;
+    border-top: 1px solid rgba(100, 150, 255, 0.2);
+    color: #90caf9;
+    font-size: 0.95rem;
+}
+
+.blog-stats span {
+    color: #64b5f6;
+    font-weight: 600;
+}
+
+/* 响应式设计 */
+@media (max-width: 768px) {
+    .blog-controls {
+        flex-direction: column;
+        align-items: stretch;
+    }
+
+    .search-box {
+        min-width: 100%;
+    }
+
+    .filter-tags {
+        justify-content: center;
+    }
+
+    .post-footer {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+
+    .read-more-btn {
+        align-self: stretch;
+        justify-content: center;
+    }
+
+    .blog-post h3 {
+        font-size: 1.4rem;
+    }
+}

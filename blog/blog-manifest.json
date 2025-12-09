@@ -1,0 +1,24 @@
+{
+    "posts": [
+        {
+            "id": "Website-Launch",
+            "title": "First Built of My Personal Website",
+            "date": "December 09, 2025",
+            "readTime": "2 minutes",
+            "filename": "2025-12-09-buildMyWebsite.html",
+            "tags": [
+                "Website",
+                "Personal Blog",
+                "Launch"
+            ],
+            "summary": "Announcing the launch of my personal website to share my research and experiences.",
+            "featured": false
+        }
+    ],
+    "metadata": {
+        "title": "Astronomy Research Blog",
+        "description": "Personal blog about astronomy research, observations, and data science",
+        "author": "Zhixuan Li",
+        "lastUpdated": "2023-10-15"
+    }
+}

@@ -6,6 +6,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Astronomy Researcher</title>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+  <link rel="stylesheet" href="css/blog.css">
   <style>
     /* Global Styles */
     * {
@@ -18,7 +19,7 @@
     body {
       background:
         linear-gradient(rgba(10, 15, 40, 0.75), rgba(5, 10, 30, 0.8)),
-        url("stars.png") no-repeat center center fixed;
+        url("./images/stars.png") no-repeat center center fixed;
       background-size: cover;
       color: #e0e7ff;
       min-height: 100vh;
@@ -741,7 +742,7 @@
             </div>
             <div class="home-photo">
               <!-- 这里放置你的照片 -->
-              <img src="profile.jpg" alt="Zhixuan Li Photo" class="profile-photo circular" />
+              <img src="./images/profile.jpg" alt="Zhixuan Li Photo" class="profile-photo circular" />
             </div>
           </div>
         </div>
@@ -809,7 +810,7 @@
                 </p>
               </div>
               <div class="project-image">
-                <img src="./surface_density.png" alt="CPD Simulation" class="project-img" />
+                <img src="./images/surface_density.png" alt="CPD Simulation" class="project-img" />
               </div>
             </div>
 
@@ -830,27 +831,60 @@
 
         <!-- Blog Tab -->
         <div class="tab-content" id="blog">
-          <h2>Blog</h2>
-          <p>Personal reflections and research updates.</p>
+          <h2>Personal Blog</h2>
+          <p class="blog-intro">Here I record research insights, my activities and moments. Blog content is updated
+            regularly.</p>
 
-          <div class="blog-posts">
-            <div class="blog-post">
-              <h3>Observing with FAST Telescope</h3>
-              <p>
-                Experience using the world's largest single-dish radio
-                telescope.
-              </p>
+          <!-- 博客控制栏 -->
+          <div class="blog-controls">
+            <div class="search-box">
+              <input type="text" id="blog-search" placeholder="Search blog posts...">
+              <i class="fas fa-search"></i>
             </div>
-
-            <div class="blog-post">
-              <h3>Galaxy Simulation Challenges</h3>
-              <p>
-                Technical challenges in large-scale galaxy formation
-                simulations.
-              </p>
+            <div class="filter-tags">
+              <button class="tag-filter active" data-tag="all">All</button>
+              <!-- <button class="tag-filter" data-tag="observations">Observations</button> -->
+              <!-- <button class="tag-filter" data-tag="simulations">Simulations</button> -->
+              <!-- <button class="tag-filter" data-tag="data-science">Data Science</button> -->
             </div>
           </div>
+
+          <!-- 博客文章将动态加载到这里 -->
+          <div id="blog-posts-container" class="blog-posts">
+            <!-- 加载状态 -->
+            <div class="loading-state">
+              <div class="spinner"></div>
+              <p>Loading blog posts...</p>
+            </div>
+          </div>
+
+          <!-- 博客文章统计 -->
+          <div id="blog-stats" class="blog-stats" style="display: none;">
+            <p>Showing <span id="posts-count">0</span> of <span id="total-posts">0</span> posts</p>
+          </div>
         </div>
+        <!-- <div class="tab-content" id="blog"> -->
+        <!--   <h2>Blog</h2> -->
+        <!--   <p>Personal reflections and research updates.</p> -->
+        <!---->
+        <!--   <div class="blog-posts"> -->
+        <!--     <div class="blog-post"> -->
+        <!--       <h3>Observing with FAST Telescope</h3> -->
+        <!--       <p> -->
+        <!--         Experience using the world's largest single-dish radio -->
+        <!--         telescope. -->
+        <!--       </p> -->
+        <!--     </div> -->
+        <!---->
+        <!--     <div class="blog-post"> -->
+        <!--       <h3>Galaxy Simulation Challenges</h3> -->
+        <!--       <p> -->
+        <!--         Technical challenges in large-scale galaxy formation -->
+        <!--         simulations. -->
+        <!--       </p> -->
+        <!--     </div> -->
+        <!--   </div> -->
+        <!-- </div> -->
 
         <!-- Data Collection Tab -->
         <div class="tab-content" id="collection">
@@ -955,7 +989,7 @@
     <!--   </div> -->
     <!-- </footer> -->
   </div>
-
+  <!-- 博客加载器脚本 -->
   <script>
     // Tab switching functionality
     document.addEventListener("DOMContentLoaded", function () {
@@ -982,6 +1016,7 @@
       });
     });
   </script>
+  <script src="./js/blog-loader.js"></script>
 </body>
 
 </html>
