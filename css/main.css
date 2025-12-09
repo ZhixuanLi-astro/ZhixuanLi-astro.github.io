@@ -73,7 +73,7 @@ body {
 }
 
 .container {
-    max-width: 65%;
+    max-width: 75%;
     margin: 0 auto;
     padding: 20px;
 }
@@ -86,19 +86,71 @@ header {
 }
 
 .avatar {
-    width: 140px;
-    height: 140px;
-    border-radius: 50%;
-    border: 4px solid rgba(255, 255, 255, 0.3);
+    width: 800px;
+    height: 100px;
+    border-radius: 0%;
+    border: 0px solid rgba(255, 255, 255, 0.1);
     box-shadow: 0 5px 20px rgba(0, 0, 0, 0.3);
-    margin: 0 auto 15px;
-    background: linear-gradient(135deg, #1a237e, #311b92);
+    margin: 0 auto 80px;
+    margin-top: 80px;
+    /* background: linear-gradient(135deg, #1a237e, #311b92);*/
     display: flex;
     align-items: center;
     justify-content: center;
     font-size: 60px;
     color: #bbdefb;
+    overflow: hidden;
 }
+
+.avatar::before {
+    content: "";
+    position: absolute;
+    width: 350px;
+    height: 350px;
+    border-radius: 50%;
+    background-image: url("../images/jupiter.jpg");
+    background-size: cover;
+    background-position: center;
+    opacity: 0.35;
+    /* background: linear-gradient(135deg, #1a237e, #311b92);*/
+    z-index: -1;
+}
+
+.avatar img {
+    width: 100%;
+    height: 100%;
+    /* object-fit: cover; */
+    /* display: block; */
+}
+
+.wide-header-image {
+    display: block;
+    margin: 0 auto 20px auto;
+    /* 上下边距 | 水平居中 | 下方与标题的间距 */
+    max-width: 80%;
+    opacity: 0.8;
+    /* 图片最大宽度为容器宽度的80%，可根据需要调整（60%-90%） */
+    height: auto;
+    /* 高度自动，保持图片原始比例 */
+    border-radius: 20px;
+    /* 可选：添加轻微的圆角，使边缘柔和，如不需要可设为 0 */
+    box-shadow: 0 15px 35px rgba(0, 0, 0, 0);
+    /* 添加一个显著的阴影增强立体感 */
+    object-fit: contain;
+    /* 确保整个图片在框内完整显示，不会裁剪 */
+}
+
+/* /* 添加悬停交互效果 */
+/* .wide-header-image:hover { */
+/*     transform: translateY(-5px); */
+/*     /* 轻微上浮 */
+/*     box-shadow: 0 20px 40px rgba(0, 0, 0, 0.35); */
+/*     /* 悬停时阴影增强 */
+/*     transition: */
+/*         transform 0.3s ease, */
+/*         box-shadow 0.3s ease; */
+/*     /* 平滑过渡动画 */
+/* } */
 
 h1 {
     font-size: 2.8rem;
@@ -118,7 +170,8 @@ h1 {
 
 /* Tabs Container */
 .tabs-container {
-    background-color: rgba(15, 20, 50, 0.85);
+    width: 100%;
+    background-color: rgba(15, 20, 50, 0.7);
     border-radius: 15px;
     box-shadow: 0 15px 35px rgba(0, 0, 0, 0.4);
     overflow: hidden;
@@ -197,7 +250,7 @@ h1 {
     /* 卡片之间的间距 */
     margin: 40px auto 0;
     /* 上下边距，左右自动居中 */
-    width: 80%;
+    width: 90%;
     /* 容器宽度为父元素的80% */
     /* max-width: 1200px;*/
     /* 最大宽度限制 */
