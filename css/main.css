@@ -9,7 +9,7 @@
 body {
     background:
         linear-gradient(rgba(10, 15, 40, 0.75), rgba(5, 10, 30, 0.8)),
-        url("./images/stars.png") no-repeat center center fixed;
+        url("../images/stars.png") no-repeat center center fixed;
     background-size: cover;
     color: #e0e7ff;
     min-height: 100vh;
