@@ -20,19 +20,20 @@ body {
 /* Home选项卡布局样式 */
 .home-content {
     display: flex;
-    align-items: flex-start;
-    justify-content: space-between;
-    gap: 40px;
+    /* align-items: flex-start; */
+    justify-content: center;
+    gap: 30px;
     margin-top: 30px;
 }
 
 .home-text {
-    flex: 1;
-    text-align: left;
+    flex: 0 1 50%;
+    /* background-color: rgba(25, 30, 70, 0.6); */
+    text-align: center;
 }
 
 .home-photo {
-    flex: 0 0 300px;
+    flex: 0 0 30%;
     display: flex;
     justify-content: center;
     align-items: flex-start;
@@ -40,7 +41,7 @@ body {
 
 .profile-photo {
     width: 100%;
-    max-width: 300px;
+    max-width: 430px;
     height: auto;
     border-radius: 15px;
     box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
@@ -128,16 +129,15 @@ header {
     margin: 0 auto 20px auto;
     /* 上下边距 | 水平居中 | 下方与标题的间距 */
     max-width: 80%;
-    opacity: 0.8;
     /* 图片最大宽度为容器宽度的80%，可根据需要调整（60%-90%） */
     height: auto;
     /* 高度自动，保持图片原始比例 */
     border-radius: 20px;
-    /* 可选：添加轻微的圆角，使边缘柔和，如不需要可设为 0 */
-    box-shadow: 0 15px 35px rgba(0, 0, 0, 0);
-    /* 添加一个显著的阴影增强立体感 */
+    /* 圆角*/
+    /* box-shadow: 0 15px 35px rgba(0, 0, 0, 0); */
     object-fit: contain;
     /* 确保整个图片在框内完整显示，不会裁剪 */
+    opacity: 0.5;
 }
 
 /* /* 添加悬停交互效果 */
