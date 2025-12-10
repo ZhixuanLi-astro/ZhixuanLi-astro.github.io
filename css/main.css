@@ -173,21 +173,23 @@ h1 {
   font-size: 2.8rem;
   margin-bottom: 10px;
   /* 初始渐变 */
-  background: linear-gradient(to right, #bbdefb, #1121a3, #bbdefb);
+  background: linear-gradient(to right, #bbdefb, #1141a3, #bbdefb);
   background-size: 200% auto;
-  background-position: 110% center;
+  background-position: 100% center;
   /* 背景拉宽，为移动留出空间 */
   -webkit-background-clip: text;
   background-clip: text;
   color: transparent;
-  transition: all 0.5s ease;
+  transition:
+    transform 0.6s,
+    background-position 0.6s cubic-bezier(0.32, 0.24, 0.39, 1.01);
   /* 添加一层基础发光 */
   text-shadow: 0 0 5px rgba(100, 181, 246, 0.2);
 }
 
 h1:hover {
   transform: scale(1.02) translateY(-5px);
-  background-position: 0% center;
+  background-position: -100% center;
   /* 移动背景位置，产生流动感 */
   text-shadow:
     0 0 10px rgba(100, 181, 246, 0.7),
