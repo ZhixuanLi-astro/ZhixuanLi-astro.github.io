@@ -3,7 +3,13 @@
   margin: 0;
   padding: 0;
   box-sizing: border-box;
-  font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+  font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif, serif;
+}
+
+/* 针对中文语言环境的元素，应用中文字体栈 */
+:lang(zh) * {
+  font-family:
+    "Source Han Serif", "Microsoft YaHei", "微软雅黑", "SimSun", "宋体", serif;
 }
 
 body {
@@ -126,9 +132,9 @@ header {
 
 .wide-header-image {
   display: block;
-  margin: 0 auto 20px auto;
+  margin: 0 auto -10px auto;
   /* 上下边距 | 水平居中 | 下方与标题的间距 */
-  max-width: 80%;
+  max-width: 70%;
   /* 图片最大宽度为容器宽度的80%，可根据需要调整（60%-90%） */
   height: auto;
   /* 高度自动，保持图片原始比例 */
@@ -138,27 +144,65 @@ header {
   object-fit: contain;
   /* 确保整个图片在框内完整显示，不会裁剪 */
   opacity: 0.5;
+  transition:
+    transform 0.3s ease,
+    box-shadow 0.3s ease;
 }
 
-/* /* 添加悬停交互效果 */
-/* .wide-header-image:hover { */
-/*     transform: translateY(-5px); */
-/*     /* 轻微上浮 */
-/*     box-shadow: 0 20px 40px rgba(0, 0, 0, 0.35); */
-/*     /* 悬停时阴影增强 */
-/*     transition: */
-/*         transform 0.3s ease, */
-/*         box-shadow 0.3s ease; */
-/*     /* 平滑过渡动画 */
+/* 添加悬停交互效果*/
+.wide-header-image:hover {
+  transform: scale(1.05) translateY(-10px);
+  /* box-shadow: 0 20px 40px rgba(0, 0, 0, 0.35); */
+}
+
+/* h1 { */
+/*   font-size: 2.8rem; */
+/*   margin-bottom: 10px; */
+/*   background: linear-gradient(to right, #bbdefb, #64b5f6); */
+/*   -webkit-background-clip: text; */
+/*   background-clip: text; */
+/*   color: transparent; */
+/*   transition: all 0.3s ease; */
+/* } */
+/**/
+/* h1:hover { */
+/*   transform: scale(1.02) translateY(-5px); */
 /* } */
 
 h1 {
   font-size: 2.8rem;
   margin-bottom: 10px;
-  background: linear-gradient(to right, #bbdefb, #64b5f6);
+  /* 初始渐变 */
+  background: linear-gradient(to right, #bbdefb, #1121a3, #bbdefb);
+  background-size: 200% auto;
+  background-position: 110% center;
+  /* 背景拉宽，为移动留出空间 */
   -webkit-background-clip: text;
   background-clip: text;
   color: transparent;
+  transition: all 0.5s ease;
+  /* 添加一层基础发光 */
+  text-shadow: 0 0 5px rgba(100, 181, 246, 0.2);
+}
+
+h1:hover {
+  transform: scale(1.02) translateY(-5px);
+  background-position: 0% center;
+  /* 移动背景位置，产生流动感 */
+  text-shadow:
+    0 0 10px rgba(100, 181, 246, 0.7),
+    0 0 20px rgba(187, 222, 251, 0.5);
+  /* 增强发光 */
+}
+
+h2 {
+  background: linear-gradient(to right, #1121a3, #bbdefb);
+  color: transparent;
+  background-clip: text;
+  margin-bottom: 20px;
+  font-size: 2rem;
+  text-align: center;
+  font-family: "宋体", serif;
 }
 
 .tagline {
@@ -483,12 +527,10 @@ h1 {
   left: -10px;
   right: -10px;
   bottom: -10px;
-  background: linear-gradient(
-    45deg,
-    transparent 30%,
-    rgba(100, 150, 255, 0.1) 50%,
-    transparent 70%
-  );
+  background: linear-gradient(45deg,
+      transparent 30%,
+      rgba(100, 150, 255, 0.1) 50%,
+      transparent 70%);
   z-index: 0;
   opacity: 0;
   transition: opacity 0.5s ease;
