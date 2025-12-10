@@ -135,7 +135,7 @@ header {
   margin: 0 auto -10px auto;
   /* 上下边距 | 水平居中 | 下方与标题的间距 */
   max-width: 70%;
-  /* 图片最大宽度为容器宽度的80%，可根据需要调整（60%-90%） */
+  /* 图片最大宽度为容器宽度的80% */
   height: auto;
   /* 高度自动，保持图片原始比例 */
   border-radius: 20px;
@@ -527,12 +527,10 @@ h2 {
   left: -10px;
   right: -10px;
   bottom: -10px;
-  background: linear-gradient(
-    45deg,
-    transparent 30%,
-    rgba(100, 150, 255, 0.1) 50%,
-    transparent 70%
-  );
+  background: linear-gradient(45deg,
+      transparent 30%,
+      rgba(100, 150, 255, 0.1) 50%,
+      transparent 70%);
   z-index: 0;
   opacity: 0;
   transition: opacity 0.5s ease;
@@ -725,6 +723,10 @@ footer {
 }
 
 @media (max-width: 768px) {
+  .wide-header-image {
+    max-width: 90%;
+  }
+
   .container {
     max-width: 95%;
     padding: 10px;
