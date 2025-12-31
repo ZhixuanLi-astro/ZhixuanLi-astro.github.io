@@ -13,6 +13,18 @@
             ],
             "summary": "Announcing the launch of my personal website to share my research and experiences.",
             "featured": false
+        },
+        {
+            "id": "New_year",
+            "title": "Happy New Year 2026!",
+            "date": "January 01, 2026",
+            "readTime": "1 year",
+            "filename": "2026-01-01-Newyear.html",
+            "tags": [
+                "New year"
+            ],
+            "summary": "Happy New Year, guys",
+            "featured": false
         }
     ],
     "metadata": {
