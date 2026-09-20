@@ -1,0 +1,8 @@
+/* Gold accent preset (use with --style gold) */
+.reveal .slides section {
+  text-align: left;
+}
+
+.reveal .progress {
+  color: #ffd700;
+}
