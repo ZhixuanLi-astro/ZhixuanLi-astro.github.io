@@ -1,0 +1,1308 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <title>slides</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <link rel="icon" href="data:,">
+
+    <link rel="stylesheet" href="_talkmd/reveal/dist/reset.css">
+    <link rel="stylesheet" href="_talkmd/reveal/dist/reveal.css">
+    <link rel="stylesheet" href="_talkmd/reveal/dist/theme/beige.css" id="theme">
+    <link rel="stylesheet" href="_talkmd/styles/base.css">
+    <link rel="stylesheet" href="_talkmd/styles/gold.css">
+    <link rel="stylesheet" href="_talkmd/reveal/plugin/highlight/monokai.css">
+
+
+
+    <style>
+      /* Small helper UI: color picker overlay (press 'c' to toggle). */
+      .float-colorpicker {
+        position: fixed;
+        right: 16px;
+        bottom: 16px;
+        z-index: 9999;
+        display: none;
+        gap: 10px;
+        align-items: stretch;
+        padding: 10px 12px;
+        border-radius: 10px;
+        background: rgba(0,0,0,0.55);
+        color: #fff;
+        --float-alpha-rgb: 255, 77, 77;
+        font: 14px/1.2 system-ui, -apple-system, Segoe UI, Roboto, Ubuntu, Cantarell, Noto Sans, Arial, sans-serif;
+      }
+      .float-colorpicker.is-open { display: inline-flex; }
+      .float-colorpicker .stack { display: grid; grid-template-columns: 1fr; gap: 8px; }
+      .float-colorpicker .row { display: flex; align-items: center; gap: 10px; flex-wrap: nowrap; }
+      .float-colorpicker code {
+        background: rgba(255,255,255,0.12);
+        padding: 3px 6px;
+        border-radius: 6px;
+        cursor: pointer;
+      }
+      .float-colorpicker code.is-selected {
+        outline: 1px solid rgba(255,255,255,0.35);
+      }
+      .float-colorpicker .swatchbtn {
+        width: 38px;
+        height: 26px;
+        border-radius: 8px;
+        border: 1px solid rgba(255,255,255,0.25);
+        overflow: hidden;
+        position: relative;
+        padding: 0;
+        cursor: pointer;
+        background:
+          linear-gradient(45deg, rgba(255,255,255,0.16) 25%, transparent 25%) 0 0/10px 10px,
+          linear-gradient(-45deg, rgba(255,255,255,0.16) 25%, transparent 25%) 0 0/10px 10px,
+          linear-gradient(45deg, transparent 75%, rgba(255,255,255,0.16) 75%) 0 0/10px 10px,
+          linear-gradient(-45deg, transparent 75%, rgba(255,255,255,0.16) 75%) 0 0/10px 10px;
+      }
+      .float-colorpicker .swatchbtn:focus {
+        outline: 2px solid rgba(255,255,255,0.35);
+        outline-offset: 2px;
+      }
+      .float-colorpicker .swatchbtn .fill {
+        position: absolute;
+        inset: 0;
+        background: rgba(255, 77, 77, 1);
+      }
+      .float-colorpicker input[type="color"].hidden {
+        position: absolute;
+        width: 1px;
+        height: 1px;
+        padding: 0;
+        margin: -1px;
+        overflow: hidden;
+        clip: rect(0, 0, 0, 0);
+        white-space: nowrap;
+        border: 0;
+      }
+      .float-colorpicker button {
+        cursor: pointer;
+        border: 1px solid rgba(255,255,255,0.25);
+        background: rgba(255,255,255,0.12);
+        color: inherit;
+        padding: 5px 8px;
+        border-radius: 8px;
+      }
+      .float-colorpicker button:hover {
+        background: rgba(255,255,255,0.18);
+      }
+      .float-colorpicker .hint {
+        opacity: 0.85;
+        font-size: 12px;
+      }
+      .float-colorpicker .picker {
+        display: none;
+        gap: 10px;
+        align-items: stretch;
+      }
+      .float-colorpicker.is-editing .picker { display: flex; }
+      .float-colorpicker .svwrap {
+        position: relative;
+        width: 210px;
+        height: 140px;
+        border-radius: 10px;
+        overflow: hidden;
+        border: 1px solid rgba(255,255,255,0.18);
+        background: rgba(255,255,255,0.06);
+      }
+      .float-colorpicker canvas {
+        width: 100%;
+        height: 100%;
+        display: block;
+        touch-action: none;
+        cursor: crosshair;
+      }
+      .float-colorpicker .svcursor {
+        position: absolute;
+        width: 12px;
+        height: 12px;
+        border-radius: 50%;
+        border: 2px solid rgba(255,255,255,0.95);
+        box-shadow: 0 0 0 2px rgba(0,0,0,0.35);
+        transform: translate(-6px, -6px);
+        pointer-events: none;
+      }
+      .float-colorpicker .controls {
+        display: grid;
+        gap: 8px;
+        align-content: start;
+        min-width: 190px;
+      }
+      .float-colorpicker .controls label {
+        display: grid;
+        grid-template-columns: 42px 1fr 44px;
+        align-items: center;
+        gap: 8px;
+        font-size: 12px;
+        opacity: 0.95;
+      }
+      .float-colorpicker input[type="range"] {
+        width: 100%;
+        -webkit-appearance: none;
+        appearance: none;
+        height: 14px;
+        background: transparent;
+      }
+      .float-colorpicker input[type="range"]::-webkit-slider-runnable-track {
+        height: 10px;
+        border-radius: 999px;
+        border: 1px solid rgba(255,255,255,0.18);
+        background: rgba(255,255,255,0.10);
+      }
+      .float-colorpicker input[type="range"]::-webkit-slider-thumb {
+        -webkit-appearance: none;
+        appearance: none;
+        width: 14px;
+        height: 14px;
+        margin-top: -2px;
+        border-radius: 50%;
+        background: rgba(255,255,255,0.95);
+        border: 2px solid rgba(0,0,0,0.35);
+        box-shadow: 0 1px 4px rgba(0,0,0,0.25);
+      }
+      .float-colorpicker input[type="range"]::-moz-range-track {
+        height: 10px;
+        border-radius: 999px;
+        border: 1px solid rgba(255,255,255,0.18);
+        background: rgba(255,255,255,0.10);
+      }
+      .float-colorpicker input[type="range"]::-moz-range-thumb {
+        width: 14px;
+        height: 14px;
+        border-radius: 50%;
+        background: rgba(255,255,255,0.95);
+        border: 2px solid rgba(0,0,0,0.35);
+        box-shadow: 0 1px 4px rgba(0,0,0,0.25);
+      }
+      .float-colorpicker input[type="range"]::-moz-focus-outer { border: 0; }
+      /* Hue slider: rainbow track */
+      .float-colorpicker #float-colorpicker-h::-webkit-slider-runnable-track {
+        background: linear-gradient(to right,
+          #ff0000, #ffff00, #00ff00, #00ffff, #0000ff, #ff00ff, #ff0000);
+      }
+      .float-colorpicker #float-colorpicker-h::-moz-range-track {
+        background: linear-gradient(to right,
+          #ff0000, #ffff00, #00ff00, #00ffff, #0000ff, #ff00ff, #ff0000);
+      }
+      /* Alpha slider: checkerboard + transparent->solid gradient of current color */
+      .float-colorpicker #float-colorpicker-a::-webkit-slider-runnable-track {
+        background:
+          linear-gradient(to right, rgba(var(--float-alpha-rgb), 0), rgba(var(--float-alpha-rgb), 1)),
+          linear-gradient(45deg, rgba(255,255,255,0.16) 25%, transparent 25%) 0 0/10px 10px,
+          linear-gradient(-45deg, rgba(255,255,255,0.16) 25%, transparent 25%) 0 0/10px 10px,
+          linear-gradient(45deg, transparent 75%, rgba(255,255,255,0.16) 75%) 0 0/10px 10px,
+          linear-gradient(-45deg, transparent 75%, rgba(255,255,255,0.16) 75%) 0 0/10px 10px;
+      }
+      .float-colorpicker #float-colorpicker-a::-moz-range-track {
+        background:
+          linear-gradient(to right, rgba(var(--float-alpha-rgb), 0), rgba(var(--float-alpha-rgb), 1)),
+          linear-gradient(45deg, rgba(255,255,255,0.16) 25%, transparent 25%) 0 0/10px 10px,
+          linear-gradient(-45deg, rgba(255,255,255,0.16) 25%, transparent 25%) 0 0/10px 10px,
+          linear-gradient(45deg, transparent 75%, rgba(255,255,255,0.16) 75%) 0 0/10px 10px,
+          linear-gradient(-45deg, transparent 75%, rgba(255,255,255,0.16) 75%) 0 0/10px 10px;
+      }
+      .float-colorpicker .mini {
+        opacity: 0.85;
+        font-size: 12px;
+        text-align: right;
+        font-variant-numeric: tabular-nums;
+      }
+
+      /* Annotation coord helper UI (press 'a' to toggle). */
+      .float-coordpicker {
+        position: fixed;
+        left: 16px;
+        bottom: 16px;
+        z-index: 9999;
+        display: none;
+        gap: 8px;
+        padding: 10px 12px;
+        border-radius: 10px;
+        background: rgba(0,0,0,0.55);
+        color: #fff;
+        font: 13px/1.2 system-ui, -apple-system, Segoe UI, Roboto, Ubuntu, Cantarell, Noto Sans, Arial, sans-serif;
+        backdrop-filter: blur(6px);
+        max-width: min(520px, calc(100vw - 40px));
+      }
+      .float-coordpicker.is-open { display: grid; }
+      .float-coordpicker .row { display: flex; gap: 8px; align-items: center; flex-wrap: wrap; }
+      .float-coordpicker .hint { opacity: 0.85; font-size: 12px; }
+      .float-coordpicker code {
+        background: rgba(255,255,255,0.12);
+        padding: 3px 6px;
+        border-radius: 6px;
+        user-select: text;
+      }
+      .float-coordpicker input, .float-coordpicker select {
+        font: inherit;
+        color: inherit;
+        background: rgba(255,255,255,0.12);
+        border: 1px solid rgba(255,255,255,0.18);
+        border-radius: 8px;
+        padding: 4px 8px;
+      }
+      .float-coordpicker button {
+        cursor: pointer;
+        border: 1px solid rgba(255,255,255,0.25);
+        background: rgba(255,255,255,0.12);
+        color: inherit;
+        padding: 5px 8px;
+        border-radius: 8px;
+      }
+      .float-coordpicker button:hover { background: rgba(255,255,255,0.18); }
+      .float-coord-crosshair {
+        position: fixed;
+        inset: 0;
+        pointer-events: none;
+        z-index: 9998;
+        display: none;
+      }
+      .float-coord-crosshair.is-open { display: block; }
+      .float-coord-crosshair .v,
+      .float-coord-crosshair .h {
+        position: absolute;
+        background: rgba(255,255,255,0.55);
+        box-shadow: 0 0 0 1px rgba(0,0,0,0.25);
+      }
+      .float-coord-crosshair .v { width: 1px; top: 0; bottom: 0; }
+      .float-coord-crosshair .h { height: 1px; left: 0; right: 0; }
+      .float-coord-box {
+        position: fixed;
+        pointer-events: none;
+        z-index: 9998;
+        display: none;
+        border: 2px dashed rgba(255, 77, 77, 0.95);
+        background: rgba(255, 77, 77, 0.14);
+        box-shadow: 0 0 0 1px rgba(0,0,0,0.25);
+      }
+      .float-coord-box.is-open { display: block; }
+      .float-coord-target {
+        outline: 2px dashed rgba(60, 255, 140, 0.95);
+        outline-offset: 2px;
+      }
+      .float-coordpicker .toast {
+        position: absolute;
+        right: 10px;
+        top: -10px;
+        padding: 6px 10px;
+        border-radius: 999px;
+        background: rgba(0,0,0,0.65);
+        border: 1px solid rgba(255,255,255,0.18);
+        color: rgba(255,255,255,0.92);
+        font-size: 12px;
+        opacity: 0;
+        transform: translateY(-6px);
+        transition: opacity 120ms ease, transform 120ms ease;
+        pointer-events: none;
+        white-space: nowrap;
+      }
+      .float-coordpicker .toast.is-on {
+        opacity: 1;
+        transform: translateY(0);
+      }
+      body.float-coordpicker-open {
+        user-select: none;
+        -webkit-user-select: none;
+      }
+      body.float-coordpicker-open img,
+      body.float-coordpicker-open video {
+        -webkit-user-drag: none;
+        user-drag: none;
+      }
+      body.float-coordpicker-open .float-coordpicker,
+      body.float-coordpicker-open .float-coordpicker * {
+        user-select: text;
+        -webkit-user-select: text;
+      }
+      /* If reveal.css does not load (missing _talkmd, file://), floats are
+         position:absolute against the window and every slide piles together.
+         Keep one slide visible even without the external stylesheet. */
+      html, body {
+        width: 100%;
+        height: 100%;
+        margin: 0;
+        overflow: hidden;
+      }
+      .reveal {
+        position: relative;
+        width: 100%;
+        height: 100%;
+        overflow: hidden;
+      }
+      .reveal .slides {
+        position: absolute;
+        inset: 0;
+        width: 100%;
+        height: 100%;
+      }
+      .reveal .slides > section {
+        display: none;
+        position: absolute;
+        width: 100%;
+        height: 100%;
+        top: 0;
+        left: 0;
+      }
+      .reveal .slides > section.present {
+        display: block;
+      }
+      .reveal .slides > section > section {
+        display: none;
+        position: absolute;
+        width: 100%;
+        height: 100%;
+        top: 0;
+        left: 0;
+      }
+      .reveal .slides > section > section.present {
+        display: block;
+      }
+    </style>
+  </head>
+
+  <body>
+    <div class="reveal">
+      <div class="slides">
+        <section>
+<div class="float-box float-box--fs" data-float-kind="text" data-md-line="1" data-md-end="8" style="left:4.7%;top:19.7%;text-align:left;font-size:100px;width:90.60000000000001%;max-width:90.60000000000001%;"><p><span class="float-dress" style="color:rgba(95,0,158,1);font-weight:bold;">2D Hydrodynamic Simulation of Disk</span> <span class="float-dress" style="color:rgba(28,110,242,1);font-weight:bold;">Water Snowline</span> <span class="float-dress" style="color:rgba(95,0,158,1);font-weight:bold;">with Dust Size Distribution</span></p>
+<p><span class="float-dress" style="color:rgba(95,0,158,1);font-size:32px;">Zhixuan Li$^1$,$\,$  Yu Wang$^1$, $\,$ Chris Ormel$^1$,</span>
+<span class="float-dress" style="color:rgba(95,0,158,1);font-size:32px;">Sebastiaan Krijt$^2$,$\,$ Till Kaeufer$^2$, $\,$ Adrien Houge$^3$</span></p></div>
+<div class="float-box" data-float-kind="text" data-md-line="10" data-md-end="16" style="left:4.6%;top:71.8%;text-align:left;width:90.60000000000001%;max-width:90.60000000000001%;"><p><span class="float-dress" style="color:rgba(95,0,158,1);font-size:22px;">$^1$ Department of Astronomy, $\,$ Tsinghua University,$\,$ China.</span></p>
+<p><span class="float-dress" style="color:rgba(95,0,158,1);font-size:22px;">$^2$ University of Exeter, $\,$Exeter, $\,$United Kingdom.</span></p>
+<p><span class="float-dress" style="color:rgba(95,0,158,1);font-size:22px;">$^3$ GLOBE Institute,$\,$ University of Copenhagen, $\,$ Denmark.</span></p></div>
+<figure class="float-figure float-abs" data-float-kind="figure" data-md-line="20" data-md-end="21" id="fig2" data-float-id="fig2" style="left:86.4%;top:1.5%;width:5.8999999999999995%;max-width:5.8999999999999995%;"><div class="float-figure__stage" style="width:100%;box-sizing:border-box;"><img src="images/tsinghualogo.png" /></div></figure>
+<figure class="float-figure float-abs" data-float-kind="figure" data-md-line="23" data-md-end="24" id="fig1" data-float-id="fig1" style="left:93.0%;top:1.2%;width:6.0%;max-width:6.0%;"><div class="float-figure__stage" style="width:100%;box-sizing:border-box;"><img src="images/doalogo_purple.png" /></div></figure>
+<figure class="float-figure float-abs" data-float-kind="figure" data-md-line="26" data-md-end="27" style="left:72.3%;top:86.9%;width:28.199999999999996%;max-width:28.199999999999996%;"><div class="float-figure__stage" style="width:100%;box-sizing:border-box;"><img src="images/tsinghuabuilding.png" /></div></figure>
+<div class="float-anno-box" data-float-kind="anno" data-md-line="29" data-md-end="32" style="position:absolute;inset:0;overflow:visible;pointer-events:none;"><svg class="float-anno" viewBox="0 0 1600 900" preserveAspectRatio="none" aria-hidden="true"><rect x="0.0" y="891.0" width="1600.0" height="8.100000000000007" stroke="rgba(0,0,0,0)" style="color:rgba(0,0,0,0)" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" vector-effect="non-scaling-stroke" fill="rgb(153,0,255)" /><rect x="0.0" y="147.6" width="1600.0" height="499.49999999999994" stroke="rgba(0,0,0,0)" style="color:rgba(0,0,0,0)" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" vector-effect="non-scaling-stroke" fill="rgba(183,183,183,0.18)" /></svg></div>
+<div class="float-anno-box" data-float-kind="anno" data-md-line="34" data-md-end="37" style="position:absolute;inset:0;overflow:visible;pointer-events:none;"><svg class="float-anno" viewBox="0 0 1600 900" preserveAspectRatio="none" aria-hidden="true"><rect x="0.0" y="891.0" width="1600.0" height="8.100000000000007" stroke="rgba(0,0,0,0)" style="color:rgba(0,0,0,0)" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" vector-effect="non-scaling-stroke" fill="rgb(153,0,255)" /><rect x="68.8" y="522.0" width="758.4000000000001" height="4.5000000000000036" stroke="rgba(0,0,0,0)" style="color:rgba(0,0,0,0)" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" vector-effect="non-scaling-stroke" fill="rgb(153,0,255)" /></svg></div>
+<div class="float-anno-box" data-float-kind="anno" data-md-line="39" data-md-end="42" style="position:absolute;inset:0;overflow:visible;pointer-events:none;"><svg class="float-anno" viewBox="0 0 1600 900" preserveAspectRatio="none" aria-hidden="true"><rect x="0.0" y="883.8" width="1600.0" height="15.300000000000013" stroke="rgba(0,0,0,0)" style="color:rgba(0,0,0,0)" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" vector-effect="non-scaling-stroke" fill="rgb(153,0,255)" /><rect x="1243.2" y="405.0" width="244.80000000000004" height="4.5000000000000036" stroke="rgba(0,0,0,0)" style="color:rgba(0,0,0,0)" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" vector-effect="non-scaling-stroke" fill="rgb(153,0,255)" /></svg></div>
+</section>
+<section>
+<section>
+<div class="float-anno-box" data-float-kind="anno" data-md-line="46" data-md-end="49" style="position:absolute;inset:0;overflow:visible;pointer-events:none;"><svg class="float-anno" viewBox="0 0 1600 900" preserveAspectRatio="none" aria-hidden="true"><rect x="0.0" y="883.8" width="1600.0" height="15.300000000000013" stroke="rgba(0,0,0,0)" style="color:rgba(0,0,0,0)" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" vector-effect="non-scaling-stroke" fill="rgb(153,0,255)" /><rect x="14.399999999999999" y="81.0" width="792.0" height="3.600000000000003" stroke="rgba(0,0,0,0)" style="color:rgba(0,0,0,0)" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" vector-effect="non-scaling-stroke" fill="rgb(153,0,255)" /></svg></div>
+<figure class="float-figure float-abs" data-float-kind="figure" data-md-line="51" data-md-end="52" style="left:72.3%;top:86.9%;width:28.199999999999996%;max-width:28.199999999999996%;"><div class="float-figure__stage" style="width:100%;box-sizing:border-box;"><img src="images/tsinghuabuilding.png" /></div></figure>
+<div class="float-box" data-float-kind="text" data-md-line="53" data-md-end="55" style="left:0.8999999999999999%;top:1.4000000000000001%;text-align:left;width:76.0%;max-width:76.0%;"><h3>Water Snowline</h3></div>
+<figure class="float-figure float-abs" data-float-kind="figure" data-md-line="57" data-md-end="58" style="left:23.7%;top:17.4%;width:50.0%;max-width:50.0%;"><div class="float-figure__stage" style="width:100%;box-sizing:border-box;"><img src="images/snowline_sketch_simple.png" /></div></figure>
+</section>
+<section>
+<div class="float-anno-box" data-float-kind="anno" data-md-line="61" data-md-end="64" style="position:absolute;inset:0;overflow:visible;pointer-events:none;"><svg class="float-anno" viewBox="0 0 1600 900" preserveAspectRatio="none" aria-hidden="true"><rect x="0.0" y="883.8" width="1600.0" height="15.300000000000013" stroke="rgba(0,0,0,0)" style="color:rgba(0,0,0,0)" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" vector-effect="non-scaling-stroke" fill="rgb(153,0,255)" /><rect x="14.399999999999999" y="81.0" width="792.0" height="3.600000000000003" stroke="rgba(0,0,0,0)" style="color:rgba(0,0,0,0)" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" vector-effect="non-scaling-stroke" fill="rgb(153,0,255)" /></svg></div>
+<figure class="float-figure float-abs" data-float-kind="figure" data-md-line="66" data-md-end="67" style="left:72.3%;top:86.9%;width:28.199999999999996%;max-width:28.199999999999996%;"><div class="float-figure__stage" style="width:100%;box-sizing:border-box;"><img src="images/tsinghuabuilding.png" /></div></figure>
+<div class="float-box" data-float-kind="text" data-md-line="68" data-md-end="70" style="left:0.8999999999999999%;top:1.4000000000000001%;text-align:left;width:76.0%;max-width:76.0%;"><h3>Water Snowline —— <span class="float-dress" style="color:rgba(153,0,255,1);">Planet Birthplace</span></h3></div>
+<div class="float-box float-box--fs" data-float-kind="text" data-md-line="72" data-md-end="74" style="left:51.300000000000004%;top:20.0%;text-align:left;font-size:35px;"><ul>
+<li><span class="float-dress" style="font-size:32px;">Induce dust pile-up → Trigger Streaming Instability → Start Planet Formation</span></li>
+</ul></div>
+<figure class="float-figure float-abs" data-float-kind="figure" data-md-line="75" data-md-end="76" style="left:-5.0%;top:19.5%;width:50.0%;max-width:50.0%;"><div class="float-figure__stage" style="width:100%;box-sizing:border-box;"><img src="images/snowline_sketch_retro.png" /></div></figure>
+</section>
+<section>
+<div class="float-anno-box" data-float-kind="anno" data-md-line="80" data-md-end="83" style="position:absolute;inset:0;overflow:visible;pointer-events:none;"><svg class="float-anno" viewBox="0 0 1600 900" preserveAspectRatio="none" aria-hidden="true"><rect x="0.0" y="883.8" width="1600.0" height="15.300000000000013" stroke="rgba(0,0,0,0)" style="color:rgba(0,0,0,0)" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" vector-effect="non-scaling-stroke" fill="rgb(153,0,255)" /><rect x="14.399999999999999" y="81.0" width="792.0" height="3.600000000000003" stroke="rgba(0,0,0,0)" style="color:rgba(0,0,0,0)" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" vector-effect="non-scaling-stroke" fill="rgb(153,0,255)" /></svg></div>
+<figure class="float-figure float-abs" data-float-kind="figure" data-md-line="85" data-md-end="86" style="left:72.3%;top:86.9%;width:28.199999999999996%;max-width:28.199999999999996%;"><div class="float-figure__stage" style="width:100%;box-sizing:border-box;"><img src="images/tsinghuabuilding.png" /></div></figure>
+<div class="float-box" data-float-kind="text" data-md-line="87" data-md-end="89" style="left:0.8999999999999999%;top:1.4000000000000001%;text-align:left;width:76.0%;max-width:76.0%;"><h3>Water Snowline —— <span class="float-dress" style="color:rgba(153,0,255,1);">1 D</span></h3></div>
+<div class="float-box float-box--fs" data-float-kind="text" data-md-line="91" data-md-end="93" style="left:51.300000000000004%;top:20.0%;text-align:left;font-size:35px;"><ul>
+<li><span class="float-dress" style="font-size:32px;">Induce dust pile-up → Trigger Streaming Instability → Start Planet Formation</span></li>
+</ul></div>
+<figure class="float-figure float-abs" data-float-kind="figure" data-md-line="95" data-md-end="96" style="left:-5.0%;top:19.5%;width:50.0%;max-width:50.0%;"><div class="float-figure__stage" style="width:100%;box-sizing:border-box;"><img src="images/snowline_sketch_retro.png" /></div></figure>
+<div class="float-video float-abs" data-float-kind="video" data-md-line="100" data-md-end="101" style="left:53.800000000000004%;top:30.0%;width:38.0%;max-width:38.0%;"><div class="float-video__stage"><video class="float-video__el" controls><source src="images/icelineDjoeke.mp4" />Your browser does not support the video tag.</video></div><div class="float-video__caption"><p>Schoonenberg &amp; Ormel. 2017.</p></div></div>
+</section>
+<section>
+<div class="float-anno-box" data-float-kind="anno" data-md-line="105" data-md-end="108" style="position:absolute;inset:0;overflow:visible;pointer-events:none;"><svg class="float-anno" viewBox="0 0 1600 900" preserveAspectRatio="none" aria-hidden="true"><rect x="0.0" y="882.0" width="1600.0" height="15.300000000000013" stroke="rgba(0,0,0,0)" style="color:rgba(0,0,0,0)" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" vector-effect="non-scaling-stroke" fill="rgb(153,0,255)" /><rect x="14.399999999999999" y="81.0" width="792.0" height="3.600000000000003" stroke="rgba(0,0,0,0)" style="color:rgba(0,0,0,0)" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" vector-effect="non-scaling-stroke" fill="rgb(153,0,255)" /></svg></div>
+<figure class="float-figure float-abs" data-float-kind="figure" data-md-line="110" data-md-end="111" style="left:72.3%;top:86.9%;width:28.199999999999996%;max-width:28.199999999999996%;"><div class="float-figure__stage" style="width:100%;box-sizing:border-box;"><img src="images/tsinghuabuilding.png" /></div></figure>
+<div class="float-box" data-float-kind="text" data-md-line="112" data-md-end="114" style="left:0.8999999999999999%;top:1.4000000000000001%;text-align:left;width:76.0%;max-width:76.0%;"><h3>Water Snowline ——  <span class="float-dress" style="color:rgba(153,0,255,1);">2 D</span></h3></div>
+<figure class="float-figure float-abs" data-float-kind="figure" data-md-line="116" data-md-end="117" style="left:-5.0%;top:19.5%;width:50.0%;max-width:50.0%;"><div class="float-figure__stage" style="width:100%;box-sizing:border-box;"><img src="images/snowline_sketch_vertical.png" /></div></figure>
+<figure class="float-figure float-abs" data-float-kind="figure" data-md-line="119" data-md-end="120" style="left:54.300000000000004%;top:33.800000000000004%;width:42.0%;max-width:42.0%;"><div class="float-figure__stage" style="width:100%;box-sizing:border-box;border:5px solid #9900ff;"><img src="images/Wang2025.png" /></div><figcaption><p>Wang et al. 2025</p></figcaption></figure>
+<div class="float-box float-box--fs" data-float-kind="text" data-md-line="122" data-md-end="124" style="left:51.300000000000004%;top:20.0%;text-align:left;font-size:35px;width:40.0%;max-width:40.0%;"><ul>
+<li><span class="float-dress" style="font-size:32px;">Vertical <span class="float-dress" style="font-weight:bold;">water cycle</span> enhances pile-up. </span></li>
+</ul></div>
+</section>
+</section>
+<section>
+<section>
+<div class="float-anno-box" data-float-kind="anno" data-md-line="129" data-md-end="132" style="position:absolute;inset:0;overflow:visible;pointer-events:none;"><svg class="float-anno" viewBox="0 0 1600 900" preserveAspectRatio="none" aria-hidden="true"><rect x="0.0" y="883.8" width="1600.0" height="15.300000000000013" stroke="rgba(0,0,0,0)" style="color:rgba(0,0,0,0)" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" vector-effect="non-scaling-stroke" fill="rgb(153,0,255)" /><rect x="14.399999999999999" y="81.0" width="792.0" height="3.600000000000003" stroke="rgba(0,0,0,0)" style="color:rgba(0,0,0,0)" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" vector-effect="non-scaling-stroke" fill="rgb(153,0,255)" /></svg></div>
+<figure class="float-figure float-abs" data-float-kind="figure" data-md-line="134" data-md-end="135" style="left:72.3%;top:86.9%;width:28.199999999999996%;max-width:28.199999999999996%;"><div class="float-figure__stage" style="width:100%;box-sizing:border-box;"><img src="images/tsinghuabuilding.png" /></div></figure>
+<div class="float-box" data-float-kind="text" data-md-line="136" data-md-end="138" style="left:0.8999999999999999%;top:1.4000000000000001%;text-align:left;width:76.0%;max-width:76.0%;"><h3>Dust Size Distribution</h3></div>
+<figure class="float-figure float-abs" data-float-kind="figure" data-md-line="140" data-md-end="141" style="left:55.60000000000001%;top:44.1%;width:40.0%;max-width:40.0%;"><div class="float-figure__stage" style="width:100%;box-sizing:border-box;"><img src="images/distribution_sketch.png" /></div></figure>
+<figure class="float-figure float-abs" data-float-kind="figure" data-md-line="143" data-md-end="144" style="left:-5.0%;top:19.5%;width:50.0%;max-width:50.0%;"><div class="float-figure__stage" style="width:100%;box-sizing:border-box;"><img src="images/snowline_sketch.png" /></div></figure>
+<div class="float-box" data-float-kind="text" data-md-line="146" data-md-end="148" style="left:55.60000000000001%;top:20.5%;text-align:left;width:36.6%;max-width:36.6%;"><ol>
+<li><span class="float-dress" style="font-weight:bold;font-size:35px;">Surface area</span> <span class="float-dress" style="font-size:32px;">decides the sublimation/condensation. Big pebbles dominant in mass, small dust dominant in surface area.</span></li>
+</ol></div>
+</section>
+<section>
+<div class="float-anno-box" data-float-kind="anno" data-md-line="151" data-md-end="154" style="position:absolute;inset:0;overflow:visible;pointer-events:none;"><svg class="float-anno" viewBox="0 0 1600 900" preserveAspectRatio="none" aria-hidden="true"><rect x="0.0" y="883.8" width="1600.0" height="15.300000000000013" stroke="rgba(0,0,0,0)" style="color:rgba(0,0,0,0)" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" vector-effect="non-scaling-stroke" fill="rgb(153,0,255)" /><rect x="14.399999999999999" y="81.0" width="792.0" height="3.600000000000003" stroke="rgba(0,0,0,0)" style="color:rgba(0,0,0,0)" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" vector-effect="non-scaling-stroke" fill="rgb(153,0,255)" /></svg></div>
+<figure class="float-figure float-abs" data-float-kind="figure" data-md-line="156" data-md-end="157" style="left:72.3%;top:86.9%;width:28.199999999999996%;max-width:28.199999999999996%;"><div class="float-figure__stage" style="width:100%;box-sizing:border-box;"><img src="images/tsinghuabuilding.png" /></div></figure>
+<div class="float-box" data-float-kind="text" data-md-line="158" data-md-end="160" style="left:0.8999999999999999%;top:1.4000000000000001%;text-align:left;width:76.0%;max-width:76.0%;"><h3>Dust Size Distribution</h3></div>
+<figure class="float-figure float-abs" data-float-kind="figure" data-md-line="162" data-md-end="163" style="left:-5.0%;top:19.5%;width:50.0%;max-width:50.0%;"><div class="float-figure__stage" style="width:100%;box-sizing:border-box;"><img src="images/snowline_sketch2.png" /></div></figure>
+<div class="float-box" data-float-kind="text" data-md-line="164" data-md-end="168" style="left:55.60000000000001%;top:20.5%;text-align:left;width:36.6%;max-width:36.6%;"><ol>
+<li><span class="float-dress" style="font-weight:bold;font-size:35px;">Surface area</span> <span class="float-dress" style="font-size:32px;">dicides the sublimation/condensation. Big pebbles dominant in mass, small dust dominant in surface area.</span></li>
+</ol>
+<p><span class="float-dress" style="font-weight:bold;font-size:35px;">Observationally:</span> <span class="float-dress" style="font-size:32px;">Small dust lies in higher region, affects water reservoir at upper layer. </span></p></div>
+<figure class="float-figure float-abs" data-float-kind="figure" data-md-line="169" data-md-end="171" style="left:52.7%;top:59.199999999999996%;width:47.0%;max-width:47.0%;"><div class="float-figure__stage" style="width:100%;box-sizing:border-box;"><img src="images/waterobs.png" /></div><figcaption><p>Colmenares et al. 2026</p></figcaption></figure>
+</section>
+<section>
+<div class="float-anno-box" data-float-kind="anno" data-md-line="174" data-md-end="177" style="position:absolute;inset:0;overflow:visible;pointer-events:none;"><svg class="float-anno" viewBox="0 0 1600 900" preserveAspectRatio="none" aria-hidden="true"><rect x="0.0" y="883.8" width="1600.0" height="15.300000000000013" stroke="rgba(0,0,0,0)" style="color:rgba(0,0,0,0)" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" vector-effect="non-scaling-stroke" fill="rgb(153,0,255)" /><rect x="14.399999999999999" y="81.0" width="792.0" height="3.600000000000003" stroke="rgba(0,0,0,0)" style="color:rgba(0,0,0,0)" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" vector-effect="non-scaling-stroke" fill="rgb(153,0,255)" /></svg></div>
+<figure class="float-figure float-abs" data-float-kind="figure" data-md-line="179" data-md-end="180" style="left:72.3%;top:86.9%;width:28.199999999999996%;max-width:28.199999999999996%;"><div class="float-figure__stage" style="width:100%;box-sizing:border-box;"><img src="images/tsinghuabuilding.png" /></div></figure>
+<div class="float-box" data-float-kind="text" data-md-line="181" data-md-end="183" style="left:0.8999999999999999%;top:1.4000000000000001%;text-align:left;width:76.0%;max-width:76.0%;"><h3>Dust Size Distribution —— <span class="float-dress" style="color:rgb(153,0,255);">Collisional Relaxation</span></h3></div>
+<figure class="float-figure float-abs" data-float-kind="figure" data-md-line="185" data-md-end="186" style="left:4.0%;top:16.6%;width:30.0%;max-width:30.0%;"><div class="float-figure__stage" style="width:100%;box-sizing:border-box;"><img src="images/relaxation1.png" /></div></figure>
+<div class="float-box float-box--fs" data-float-kind="text" data-md-line="188" data-md-end="190" style="left:9.2%;top:69.19999999999999%;text-align:left;font-size:28px;width:83.0%;max-width:83.0%;"><ul>
+<li><span class="float-dress" style="font-size:35px;"><span class="float-dress" style="font-weight:bold;">Primary assumption:</span> The relaxed state is known</span></li>
+</ul></div>
+</section>
+<section>
+<div class="float-anno-box" data-float-kind="anno" data-md-line="193" data-md-end="196" style="position:absolute;inset:0;overflow:visible;pointer-events:none;"><svg class="float-anno" viewBox="0 0 1600 900" preserveAspectRatio="none" aria-hidden="true"><rect x="0.0" y="883.8" width="1600.0" height="15.300000000000013" stroke="rgba(0,0,0,0)" style="color:rgba(0,0,0,0)" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" vector-effect="non-scaling-stroke" fill="rgb(153,0,255)" /><rect x="14.399999999999999" y="81.0" width="792.0" height="3.600000000000003" stroke="rgba(0,0,0,0)" style="color:rgba(0,0,0,0)" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" vector-effect="non-scaling-stroke" fill="rgb(153,0,255)" /></svg></div>
+<figure class="float-figure float-abs" data-float-kind="figure" data-md-line="198" data-md-end="199" style="left:72.3%;top:86.9%;width:28.199999999999996%;max-width:28.199999999999996%;"><div class="float-figure__stage" style="width:100%;box-sizing:border-box;"><img src="images/tsinghuabuilding.png" /></div></figure>
+<div class="float-box" data-float-kind="text" data-md-line="200" data-md-end="202" style="left:0.8999999999999999%;top:1.4000000000000001%;text-align:left;width:76.0%;max-width:76.0%;"><h3>Dust Size Distribution —— <span class="float-dress" style="color:rgb(153,0,255);">Collisional Relaxation</span></h3></div>
+<figure class="float-figure float-abs" data-float-kind="figure" data-md-line="204" data-md-end="205" style="left:4.0%;top:16.6%;width:30.0%;max-width:30.0%;"><div class="float-figure__stage" style="width:100%;box-sizing:border-box;"><img src="images/relaxation1.png" /></div></figure>
+<figure class="float-figure float-abs" data-float-kind="figure" data-md-line="206" data-md-end="207" style="left:28.999999999999996%;top:18.9%;width:35.8%;max-width:35.8%;"><div class="float-figure__stage" style="width:100%;box-sizing:border-box;"><img src="images/relaxation2.png" /></div></figure>
+<div class="float-box float-box--fs" data-float-kind="text" data-md-line="208" data-md-end="210" style="left:9.2%;top:69.19999999999999%;text-align:left;font-size:28px;width:83.0%;max-width:83.0%;"><ul>
+<li><span class="float-dress" style="font-size:35px;"><span class="float-dress" style="font-weight:bold;">Primary assumption:</span> The relaxed state is known</span></li>
+</ul></div>
+</section>
+<section>
+<div class="float-anno-box" data-float-kind="anno" data-md-line="214" data-md-end="217" style="position:absolute;inset:0;overflow:visible;pointer-events:none;"><svg class="float-anno" viewBox="0 0 1600 900" preserveAspectRatio="none" aria-hidden="true"><rect x="0.0" y="883.8" width="1600.0" height="15.300000000000013" stroke="rgba(0,0,0,0)" style="color:rgba(0,0,0,0)" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" vector-effect="non-scaling-stroke" fill="rgb(153,0,255)" /><rect x="14.399999999999999" y="81.0" width="792.0" height="3.600000000000003" stroke="rgba(0,0,0,0)" style="color:rgba(0,0,0,0)" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" vector-effect="non-scaling-stroke" fill="rgb(153,0,255)" /></svg></div>
+<figure class="float-figure float-abs" data-float-kind="figure" data-md-line="219" data-md-end="220" style="left:72.3%;top:86.9%;width:28.199999999999996%;max-width:28.199999999999996%;"><div class="float-figure__stage" style="width:100%;box-sizing:border-box;"><img src="images/tsinghuabuilding.png" /></div></figure>
+<div class="float-box" data-float-kind="text" data-md-line="221" data-md-end="223" style="left:0.8999999999999999%;top:1.4000000000000001%;text-align:left;width:76.0%;max-width:76.0%;"><h3>Dust Size Distribution —— <span class="float-dress" style="color:rgb(153,0,255);">Collisional Relaxation</span></h3></div>
+<figure class="float-figure float-abs" data-float-kind="figure" data-md-line="225" data-md-end="226" style="left:4.0%;top:16.6%;width:30.0%;max-width:30.0%;"><div class="float-figure__stage" style="width:100%;box-sizing:border-box;"><img src="images/relaxation1.png" /></div></figure>
+<figure class="float-figure float-abs" data-float-kind="figure" data-md-line="227" data-md-end="228" style="left:28.999999999999996%;top:18.9%;width:35.8%;max-width:35.8%;"><div class="float-figure__stage" style="width:100%;box-sizing:border-box;"><img src="images/relaxation2.png" /></div></figure>
+<figure class="float-figure float-abs" data-float-kind="figure" data-md-line="229" data-md-end="230" style="left:60.0%;top:18.8%;width:35.8%;max-width:35.8%;"><div class="float-figure__stage" style="width:100%;box-sizing:border-box;"><img src="images/relaxation3.png" /></div></figure>
+<div class="float-box float-box--fs" data-float-kind="text" data-md-line="231" data-md-end="235" style="left:9.2%;top:69.19999999999999%;text-align:left;font-size:28px;width:83.0%;max-width:83.0%;"><ul>
+<li><span class="float-dress" style="font-size:35px;"><span class="float-dress" style="font-weight:bold;">Primary assumption:</span> The relaxed state is known</span>
+<p>$\,$</li></p>
+<li><span class="float-dress" style="font-size:35px;"><span class="float-dress" style="font-weight:bold;"> Net effect</span> of collision leads system back to equilibrium</span></li>
+</ul></div>
+</section>
+</section>
+<section>
+<section>
+<div class="float-anno-box" data-float-kind="anno" data-md-line="239" data-md-end="242" style="position:absolute;inset:0;overflow:visible;pointer-events:none;"><svg class="float-anno" viewBox="0 0 1600 900" preserveAspectRatio="none" aria-hidden="true"><rect x="0.0" y="883.8" width="1600.0" height="15.300000000000013" stroke="rgba(0,0,0,0)" style="color:rgba(0,0,0,0)" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" vector-effect="non-scaling-stroke" fill="rgb(153,0,255)" /><rect x="14.399999999999999" y="81.0" width="792.0" height="3.600000000000003" stroke="rgba(0,0,0,0)" style="color:rgba(0,0,0,0)" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" vector-effect="non-scaling-stroke" fill="rgb(153,0,255)" /></svg></div>
+<figure class="float-figure float-abs" data-float-kind="figure" data-md-line="244" data-md-end="245" style="left:72.3%;top:86.9%;width:28.199999999999996%;max-width:28.199999999999996%;"><div class="float-figure__stage" style="width:100%;box-sizing:border-box;"><img src="images/tsinghuabuilding.png" /></div></figure>
+<div class="float-box" data-float-kind="text" data-md-line="246" data-md-end="248" style="left:0.8999999999999999%;top:1.4000000000000001%;text-align:left;width:76.0%;max-width:76.0%;"><h3>results</h3></div>
+<div class="float-box float-box--fs" data-float-kind="text" data-md-line="250" data-md-end="254" style="left:71.3%;top:15.8%;text-align:left;font-size:35px;width:24.4%;max-width:24.4%;"><ul>
+<li><span class="float-dress" style="font-size:32px;">Pebbles drift from outer boundary</span>
+<p>$\,$</li></p>
+<li><span class="float-dress" style="font-size:32px;">Small dust generated by collision and reach upper layer</span></li>
+</ul></div>
+<div class="float-video float-abs" data-float-kind="video" data-md-line="256" data-md-end="257" style="left:0.8%;top:12.0%;width:66.7%;max-width:66.7%;"><div class="float-video__stage"><video class="float-video__el" controls><source src="images/2ddust_rho.mp4" />Your browser does not support the video tag.</video></div></div>
+<div class="float-box float-box--fs" data-float-kind="text" data-md-line="259" data-md-end="261" style="left:19.7%;top:19.8%;text-align:left;font-size:28px;width:40.0%;max-width:40.0%;"><p>(mm - cm)</p></div>
+<div class="float-box float-box--fs" data-float-kind="text" data-md-line="263" data-md-end="265" style="left:16.6%;top:76.6%;text-align:left;font-size:28px;width:40.0%;max-width:40.0%;"><p>($\mu$m)</p></div>
+</section>
+<section>
+<div class="float-anno-box" data-float-kind="anno" data-md-line="269" data-md-end="272" style="position:absolute;inset:0;overflow:visible;pointer-events:none;"><svg class="float-anno" viewBox="0 0 1600 900" preserveAspectRatio="none" aria-hidden="true"><rect x="0.0" y="882.9" width="1600.0" height="15.300000000000013" stroke="rgba(0,0,0,0)" style="color:rgba(0,0,0,0)" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" vector-effect="non-scaling-stroke" fill="rgb(153,0,255)" /><rect x="14.399999999999999" y="81.0" width="792.0" height="3.600000000000003" stroke="rgba(0,0,0,0)" style="color:rgba(0,0,0,0)" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" vector-effect="non-scaling-stroke" fill="rgb(153,0,255)" /></svg></div>
+<figure class="float-figure float-abs" data-float-kind="figure" data-md-line="274" data-md-end="275" style="left:72.3%;top:86.9%;width:28.199999999999996%;max-width:28.199999999999996%;"><div class="float-figure__stage" style="width:100%;box-sizing:border-box;"><img src="images/tsinghuabuilding.png" /></div></figure>
+<div class="float-box" data-float-kind="text" data-md-line="276" data-md-end="278" style="left:0.8999999999999999%;top:1.4000000000000001%;text-align:left;width:76.0%;max-width:76.0%;"><h3>results —— <span class="float-dress" style="color:rgb(153,0,255);">Solid-to-gas ratio</span></h3></div>
+<div class="float-box float-box--fs" data-float-kind="text" data-md-line="280" data-md-end="286" style="left:71.3%;top:15.8%;text-align:left;font-size:35px;width:24.4%;max-width:24.4%;"><ul>
+<li><span class="float-dress" style="font-size:32px;">Pebbles drift from outer boundary</span>
+<p>$\,$</li></p>
+<li><span class="float-dress" style="font-size:32px;">Small dust generated by collision</span>
+<p>$\,$</li></p>
+<li><span class="float-dress" style="font-size:32px;">Dust-to-gas ratio is enhanced.</span></li>
+</ul></div>
+<figure class="float-figure float-abs" data-float-kind="figure" data-md-line="288" data-md-end="291" style="left:0.4%;top:11.0%;width:66.7%;max-width:66.7%;"><div class="float-figure__stage" style="width:100%;box-sizing:border-box;"><img src="images/d2g.png" /><svg class="float-anno" viewBox="0 0 1933 1365" preserveAspectRatio="none" aria-hidden="true"><defs><marker id="float-anno-15-arrow-triangle-5-e-c1ffd9e753c" viewBox="0 0 10 10" refX="0" refY="5" markerUnits="strokeWidth" markerWidth="5" markerHeight="5" orient="auto"><polygon points="0 0, 10 5, 0 10" fill="black" stroke="none" /></marker></defs><path d="M 829.257 363.09 L 1092.145 358.995" fill="none" stroke="black" style="color:black" stroke-width="5" stroke-linecap="butt" stroke-linejoin="round" vector-effect="non-scaling-stroke" marker-end="url(#float-anno-15-arrow-triangle-5-e-c1ffd9e753c)" /><path d="M 809.927 507.78 L 1171.398 507.78" fill="none" stroke="black" style="color:black" stroke-width="5" stroke-linecap="butt" stroke-linejoin="round" vector-effect="non-scaling-stroke" marker-end="url(#float-anno-15-arrow-triangle-5-e-c1ffd9e753c)" /></svg></div></figure>
+<div class="float-box float-box--fs" data-float-kind="text" data-md-line="293" data-md-end="295" style="left:12.3%;top:45.0%;text-align:left;font-size:32px;width:11.5%;max-width:11.5%;"><p><span class="float-dress" style="color:rgb(255,0,0);">$\rho_{\mathrm{vapor}}/\rho_{\mathrm{gas}}$</span></p></div>
+<div class="float-box float-box--fs" data-float-kind="text" data-md-line="297" data-md-end="299" style="left:38.800000000000004%;top:60.4%;text-align:left;font-size:32px;width:11.0%;max-width:11.0%;"><p><span class="float-dress" style="color:rgb(0,0,0);">$\rho_{\mathrm{solid}}/\rho_{\mathrm{gas}}$</span></p></div>
+<div class="float-box float-box--fs" data-float-kind="text" data-md-line="301" data-md-end="303" style="left:43.1%;top:40.1%;text-align:left;font-size:32px;width:26.200000000000003%;max-width:26.200000000000003%;"><p><span class="float-dress" style="color:rgb(0,0,0);">Single pop (Wang et al. 2025)</span></p></div>
+<div class="float-box float-box--fs" data-float-kind="text" data-md-line="305" data-md-end="307" style="left:40.400000000000006%;top:31.0%;text-align:left;font-size:32px;width:9.2%;max-width:9.2%;"><p><span class="float-dress" style="color:rgb(0,0,0);">Two pop</span></p></div>
+<div class="float-anno-box" data-float-kind="anno" data-md-line="309" data-md-end="311" style="position:absolute;inset:0;overflow:visible;pointer-events:none;"></div>
+</section>
+<section>
+<div class="float-anno-box" data-float-kind="anno" data-md-line="315" data-md-end="318" style="position:absolute;inset:0;overflow:visible;pointer-events:none;"><svg class="float-anno" viewBox="0 0 1600 900" preserveAspectRatio="none" aria-hidden="true"><rect x="0.0" y="883.8" width="1600.0" height="15.300000000000013" stroke="rgba(0,0,0,0)" style="color:rgba(0,0,0,0)" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" vector-effect="non-scaling-stroke" fill="rgb(153,0,255)" /><rect x="14.399999999999999" y="81.0" width="792.0" height="3.600000000000003" stroke="rgba(0,0,0,0)" style="color:rgba(0,0,0,0)" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" vector-effect="non-scaling-stroke" fill="rgb(153,0,255)" /></svg></div>
+<figure class="float-figure float-abs" data-float-kind="figure" data-md-line="320" data-md-end="321" style="left:72.3%;top:86.9%;width:28.199999999999996%;max-width:28.199999999999996%;"><div class="float-figure__stage" style="width:100%;box-sizing:border-box;"><img src="images/tsinghuabuilding.png" /></div></figure>
+<div class="float-box" data-float-kind="text" data-md-line="322" data-md-end="324" style="left:0.8999999999999999%;top:1.4000000000000001%;text-align:left;width:76.0%;max-width:76.0%;"><h3>results —— <span class="float-dress" style="color:rgb(153,0,255);">Vapor comparison</span></h3></div>
+<div class="float-box float-box--fs" data-float-kind="text" data-md-line="326" data-md-end="328" style="left:56.00000000000001%;top:27.0%;text-align:left;font-size:35px;width:40.0%;max-width:40.0%;"><ul>
+<li><span class="float-dress" style="font-size:32px;">Vapor at upper region re-condense onto small dust bin.</span></li>
+</ul></div>
+<figure class="float-figure float-abs" data-float-kind="figure" data-md-line="330" data-md-end="331" style="left:0.5%;top:22.900000000000002%;width:50.0%;max-width:50.0%;"><div class="float-figure__stage" style="width:100%;box-sizing:border-box;"><img src="images/2ddust.png" /></div></figure>
+<figure class="float-figure float-abs" data-float-kind="figure" data-md-line="333" data-md-end="334" style="left:50.9%;top:52.0%;width:40.0%;max-width:40.0%;"><div class="float-figure__stage" style="width:100%;box-sizing:border-box;"><img src="images/2ddust_single.png" /></div></figure>
+<div class="float-anno-box" data-float-kind="anno" data-md-line="336" data-md-end="339" style="position:absolute;inset:0;overflow:visible;pointer-events:none;"><svg class="float-anno" viewBox="0 0 1600 900" preserveAspectRatio="none" aria-hidden="true"><circle cx="296.0" cy="364.5" r="90.07277601120744" stroke="rgba(153,0,255,1)" style="color:rgba(153,0,255,1)" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" vector-effect="non-scaling-stroke" fill="none" /><circle cx="1118.3999999999999" cy="603.0" r="90.07277601120744" stroke="rgba(153,0,255,1)" style="color:rgba(153,0,255,1)" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" vector-effect="non-scaling-stroke" fill="none" /></svg></div>
+</section>
+<section>
+<div class="float-anno-box" data-float-kind="anno" data-md-line="341" data-md-end="344" style="position:absolute;inset:0;overflow:visible;pointer-events:none;"><svg class="float-anno" viewBox="0 0 1600 900" preserveAspectRatio="none" aria-hidden="true"><rect x="0.0" y="883.8" width="1600.0" height="15.300000000000013" stroke="rgba(0,0,0,0)" style="color:rgba(0,0,0,0)" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" vector-effect="non-scaling-stroke" fill="rgb(153,0,255)" /><rect x="14.399999999999999" y="81.0" width="792.0" height="3.600000000000003" stroke="rgba(0,0,0,0)" style="color:rgba(0,0,0,0)" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" vector-effect="non-scaling-stroke" fill="rgb(153,0,255)" /></svg></div>
+<figure class="float-figure float-abs" data-float-kind="figure" data-md-line="346" data-md-end="347" style="left:72.3%;top:86.9%;width:28.199999999999996%;max-width:28.199999999999996%;"><div class="float-figure__stage" style="width:100%;box-sizing:border-box;"><img src="images/tsinghuabuilding.png" /></div></figure>
+<div class="float-box" data-float-kind="text" data-md-line="348" data-md-end="350" style="left:0.8999999999999999%;top:1.4000000000000001%;text-align:left;width:76.0%;max-width:76.0%;"><h3>results —— <span class="float-dress" style="color:rgb(153,0,255);">Vapor comparison</span></h3></div>
+<div class="float-box float-box--fs" data-float-kind="text" data-md-line="352" data-md-end="356" style="left:6.7%;top:69.8%;text-align:left;font-size:35px;width:40.0%;max-width:40.0%;"><ul>
+<li><span class="float-dress" style="font-weight:bold;">Vapor reservoir extended to outer disk</span>
+<p>$\,$</li></p>
+<li><span class="float-dress" style="font-weight:bold;">Observable vapor mass <span class="float-dress" style="color:rgba(255,0,0,1);">decreases</span> in active disk.</span></li>
+</ul></div>
+<div class="float-box float-box--fs" data-float-kind="text" data-md-line="358" data-md-end="367" style="left:49.6%;top:69.8%;text-align:center;font-size:24px;width:43.5%;max-width:43.5%;"><p>Vapor mass [&mu;M$_\oplus$]
+<p>$\,$</p></p>
+<table>
+<thead>
+<tr>
+<th></th>
+<th style="text-align: right;">cold (T&lt;150K)</th>
+<th style="text-align: right;">warm (150-400K)</th>
+<th style="text-align: right;">hot (T&gt;400K)</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Single</td>
+<td style="text-align: right;">4.161</td>
+<td style="text-align: right;">6.362</td>
+<td style="text-align: right;">0.115</td>
+</tr>
+<tr>
+<td>Two pop</td>
+<td style="text-align: right;">0.161</td>
+<td style="text-align: right;">3.951</td>
+<td style="text-align: right;">0.108</td>
+</tr>
+</tbody>
+</table></div>
+<figure class="float-figure float-abs" data-float-kind="figure" data-md-line="369" data-md-end="370" style="left:7.1%;top:12.4%;width:85.0%;max-width:85.0%;"><div class="float-figure__stage" style="width:100%;box-sizing:border-box;"><img src="images/vap_comp.png" /></div></figure>
+</section>
+</section>
+<section>
+<div class="float-anno-box" data-float-kind="anno" data-md-line="373" data-md-end="376" style="position:absolute;inset:0;overflow:visible;pointer-events:none;"><svg class="float-anno" viewBox="0 0 1600 900" preserveAspectRatio="none" aria-hidden="true"><rect x="0.0" y="883.8" width="1600.0" height="15.300000000000013" stroke="rgba(0,0,0,0)" style="color:rgba(0,0,0,0)" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" vector-effect="non-scaling-stroke" fill="rgb(153,0,255)" /><rect x="14.399999999999999" y="81.0" width="792.0" height="3.600000000000003" stroke="rgba(0,0,0,0)" style="color:rgba(0,0,0,0)" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" vector-effect="non-scaling-stroke" fill="rgb(153,0,255)" /></svg></div>
+<figure class="float-figure float-abs" data-float-kind="figure" data-md-line="378" data-md-end="379" style="left:72.3%;top:86.9%;width:28.199999999999996%;max-width:28.199999999999996%;"><div class="float-figure__stage" style="width:100%;box-sizing:border-box;"><img src="images/tsinghuabuilding.png" /></div></figure>
+<div class="float-box" data-float-kind="text" data-md-line="380" data-md-end="382" style="left:0.8999999999999999%;top:1.4000000000000001%;text-align:left;width:76.0%;max-width:76.0%;"><h3>TAKE-HOME</h3></div>
+<figure class="float-figure float-abs" data-float-kind="figure" data-md-line="385" data-md-end="389" style="left:1.0%;top:22.7%;width:31.8%;max-width:31.8%;"><div class="float-figure__stage" style="width:100%;box-sizing:border-box;"><img src="images/d2g.png" /><svg class="float-anno" viewBox="0 0 1933 1365" preserveAspectRatio="none" aria-hidden="true"><defs><marker id="float-anno-21-arrow-triangle-4-e-c1ffd9e753c" viewBox="0 0 10 10" refX="0" refY="5" markerUnits="strokeWidth" markerWidth="4" markerHeight="4" orient="auto"><polygon points="0 0, 10 5, 0 10" fill="black" stroke="none" /></marker></defs><path d="M 829.257 363.09 L 1092.145 358.995" fill="none" stroke="black" style="color:black" stroke-width="3" stroke-linecap="butt" stroke-linejoin="round" vector-effect="non-scaling-stroke" marker-end="url(#float-anno-21-arrow-triangle-4-e-c1ffd9e753c)" /><path d="M 809.927 507.78 L 1065.083 546.0" fill="none" stroke="black" style="color:black" stroke-width="3" stroke-linecap="butt" stroke-linejoin="round" vector-effect="non-scaling-stroke" marker-end="url(#float-anno-21-arrow-triangle-4-e-c1ffd9e753c)" /></svg></div></figure>
+<div class="float-box float-box--fs" data-float-kind="text" data-md-line="391" data-md-end="393" style="left:5.800000000000001%;top:39.6%;text-align:left;font-size:20px;width:8.0%;max-width:8.0%;"><p><span class="float-dress" style="color:rgb(255,0,0);">$\rho_{\mathrm{vapor}}/\rho_{\mathrm{gas}}$</span></p></div>
+<div class="float-box float-box--fs" data-float-kind="text" data-md-line="395" data-md-end="397" style="left:19.1%;top:45.6%;text-align:left;font-size:20px;width:7.3999999999999995%;max-width:7.3999999999999995%;"><p><span class="float-dress" style="color:rgb(0,0,0);">$\rho_{\mathrm{solid}}/\rho_{\mathrm{gas}}$</span></p></div>
+<div class="float-box float-box--fs" data-float-kind="text" data-md-line="399" data-md-end="401" style="left:18.9%;top:39.5%;text-align:left;font-size:16px;width:40.0%;max-width:40.0%;"><p><span class="float-dress" style="color:rgb(0,0,0);">Single pop (Wang et al. 2025)</span></p></div>
+<div class="float-box float-box--fs" data-float-kind="text" data-md-line="403" data-md-end="405" style="left:19.6%;top:32.1%;text-align:left;font-size:16px;width:40.0%;max-width:40.0%;"><p><span class="float-dress" style="color:rgb(0,0,0);">Two pop</span></p></div>
+<figure class="float-figure float-abs" data-float-kind="figure" data-md-line="407" data-md-end="408" style="left:33.7%;top:20.7%;width:65.4%;max-width:65.4%;"><div class="float-figure__stage" style="width:100%;box-sizing:border-box;"><img src="images/vap_comp.png" /></div></figure>
+<div class="float-box" data-float-kind="text" data-md-line="410" data-md-end="412" style="left:4.0%;top:72.1%;text-align:left;width:40.0%;max-width:40.0%;"><h1><span class="float-dress" style="color:rgba(153,0,255,1);">THANK YOU</span></h1></div>
+</section>
+      </div>
+    </div>
+
+    <script src="_talkmd/reveal/dist/reveal.js"></script>
+    <script src="_talkmd/reveal/plugin/highlight/highlight.js"></script>
+    <script src="_talkmd/reveal/plugin/notes/notes.js"></script>
+    <script src="_talkmd/reveal/plugin/math/math.js"></script>
+
+    <script>
+      (function() {
+        // Video dimensions are only known after metadata loads. Remap the
+        // generated geometry to an aspect-matched viewBox so the SVG's outer
+        // transform is uniform and arrow markers cannot skew away from paths.
+        function fitVideoAnnoGeometry(stage) {
+          if (!stage) return;
+          var svg = stage.querySelector('svg.float-anno');
+          if (!svg || !svg.viewBox || !svg.viewBox.baseVal) return;
+          var rect = stage.getBoundingClientRect();
+          var vb = svg.viewBox.baseVal;
+          if (!(rect.width > 0 && rect.height > 0 && vb.width > 0 && vb.height > 0)) return;
+          var baseW = Number(svg.getAttribute('data-talkmd-base-w')) || vb.width;
+          var baseH = Number(svg.getAttribute('data-talkmd-base-h')) || vb.height;
+          svg.setAttribute('data-talkmd-base-w', String(baseW));
+          svg.setAttribute('data-talkmd-base-h', String(baseH));
+          var yFactor = (rect.height / rect.width) * (baseW / baseH);
+          svg.setAttribute('viewBox', '0 0 ' + baseW + ' ' + (baseH * yFactor));
+
+          function scaledAttr(el, name, factor) {
+            var key = 'data-talkmd-' + name;
+            var raw = el.getAttribute(key);
+            if (raw == null) {
+              raw = el.getAttribute(name);
+              if (raw == null) return;
+              el.setAttribute(key, raw);
+            }
+            var n = Number(raw);
+            if (Number.isFinite(n)) el.setAttribute(name, String(n * factor));
+          }
+          svg.querySelectorAll(':scope > path').forEach(function(path) {
+            var raw = path.getAttribute('data-talkmd-d');
+            if (raw == null) {
+              raw = path.getAttribute('d') || '';
+              path.setAttribute('data-talkmd-d', raw);
+            }
+            var pairIndex = 0;
+            path.setAttribute('d', raw.replace(/[+-]?(?:\d+\.?\d*|\.\d+)/g, function(token) {
+              var n = Number(token);
+              var out = pairIndex % 2 ? n * yFactor : n;
+              pairIndex += 1;
+              return String(out);
+            }));
+          });
+          svg.querySelectorAll(':scope > rect').forEach(function(el) {
+            scaledAttr(el, 'y', yFactor);
+            scaledAttr(el, 'height', yFactor);
+          });
+          svg.querySelectorAll(':scope > circle').forEach(function(el) {
+            scaledAttr(el, 'cy', yFactor);
+            scaledAttr(el, 'r', Math.min(1, yFactor));
+          });
+          svg.querySelectorAll(':scope > ellipse').forEach(function(el) {
+            scaledAttr(el, 'cy', yFactor);
+            scaledAttr(el, 'ry', yFactor);
+          });
+          svg.querySelectorAll(':scope > polygon').forEach(function(el) {
+            var raw = el.getAttribute('data-talkmd-points');
+            if (raw == null) {
+              raw = el.getAttribute('points') || '';
+              el.setAttribute('data-talkmd-points', raw);
+            }
+            var nums = raw.trim().split(/[\s,]+/);
+            for (var i = 1; i < nums.length; i += 2) nums[i] = String(Number(nums[i]) * yFactor);
+            var pairs = [];
+            for (var j = 0; j + 1 < nums.length; j += 2) pairs.push(nums[j] + ',' + nums[j + 1]);
+            el.setAttribute('points', pairs.join(' '));
+          });
+        }
+        function installVideoAnnoSizing() {
+          document.querySelectorAll('.float-video__stage').forEach(function(stage) {
+            fitVideoAnnoGeometry(stage);
+            var video = stage.querySelector('video');
+            if (video) video.addEventListener('loadedmetadata', function() { fitVideoAnnoGeometry(stage); });
+            if (typeof ResizeObserver !== 'undefined') {
+              var observer = new ResizeObserver(function() { fitVideoAnnoGeometry(stage); });
+              observer.observe(stage);
+              stage._talkmdAnnoObserver = observer;
+            }
+          });
+        }
+        function firstSection(parent) {
+          if (!parent) return null;
+          for (var i = 0; i < parent.children.length; i++) {
+            if (parent.children[i].tagName === 'SECTION') return parent.children[i];
+          }
+          return null;
+        }
+        function markFirstSlide() {
+          var top = firstSection(document.querySelector('.reveal .slides'));
+          if (!top) return;
+          top.classList.add('present');
+          var nested = firstSection(top);
+          if (nested) nested.classList.add('present');
+        }
+        installVideoAnnoSizing();
+        if (typeof Reveal === 'undefined') {
+          markFirstSlide();
+          var msg = document.createElement('div');
+          msg.setAttribute('role', 'alert');
+          msg.style.cssText = 'position:fixed;left:16px;top:16px;z-index:99999;max-width:36em;padding:12px 14px;background:#1b1e27;color:#f4ead5;font:14px/1.4 system-ui,sans-serif;border-radius:8px;box-shadow:0 8px 24px rgba(0,0,0,.35)';
+          msg.textContent = 'Reveal.js did not load. Keep the _talkmd folder next to this index.html (rebuild the deck if it is missing).';
+          document.body.appendChild(msg);
+          return;
+        }
+        var file = location.protocol === 'file:';
+        var plugins = [];
+        if (typeof RevealHighlight !== 'undefined') plugins.push(RevealHighlight);
+        if (typeof RevealNotes !== 'undefined' && !file) plugins.push(RevealNotes);
+        if (typeof RevealMath !== 'undefined' && RevealMath.KaTeX) plugins.push(RevealMath.KaTeX);
+        Reveal.initialize({
+          hash: true,
+          controls: true,
+          progress: true,
+
+          center: false,
+          width: 1600,
+          height: 900,
+          minScale: 0.2,
+          maxScale: 2.0,
+          transition: 'fade',
+          plugins: plugins,
+          katex: { version: '0.16.9' }
+        }).catch(function() { markFirstSlide(); });
+      })();
+    </script>
+
+    <script>
+      (function() {
+        // Per-slide theme switching:
+        // slides can specify: <!-- .slide: data-theme="dark" --> (or any Reveal theme name).
+        const link = document.getElementById('theme');
+        if (!link) return;
+        const defaultHref = link.getAttribute('href') || '';
+        function resolveName(name) {
+          const n = String(name || '').trim().toLowerCase();
+          if (!n) return '';
+          // Special: dark/light are palette-only (keep fonts by not swapping theme CSS).
+          if (n === 'dark' || n === 'light') return n;
+          return n;
+        }
+        function hrefFor(name) {
+          if (!defaultHref) return '';
+          return defaultHref.replace(/(\/theme\/)[^\/]+(\.css)(\?.*)?$/, '$1' + name + '$2');
+        }
+        function apply() {
+          try {
+            if (!window.Reveal || typeof window.Reveal.getCurrentSlide !== 'function') return;
+            const slide = window.Reveal.getCurrentSlide();
+            const raw = (slide && (slide.dataset.theme || slide.getAttribute('data-theme'))) || '';
+            const name = resolveName(raw);
+            if (!name) {
+              if (defaultHref) link.setAttribute('href', defaultHref);
+              return;
+            }
+            if (name === 'dark' || name === 'light') {
+              // Palette-only mode: keep the deck theme (fonts stay consistent).
+              if (defaultHref) link.setAttribute('href', defaultHref);
+              return;
+            }
+            const h = hrefFor(name);
+            if (h) link.setAttribute('href', h);
+          } catch (e) {}
+        }
+        try {
+          window.Reveal.on('ready', apply);
+          window.Reveal.on('slidechanged', apply);
+        } catch (e) {}
+        apply();
+      })();
+    </script>
+
+    <div class="float-colorpicker" id="float-colorpicker" aria-hidden="true">
+      <div class="stack">
+        <div class="row">
+          <button type="button" class="swatchbtn" id="float-colorpicker-swatch" title="Pick a color (with alpha preview)">
+            <span class="fill" id="float-colorpicker-preview"></span>
+          </button>
+          <span class="hint">Press <b>c</b> to toggle</span>
+        </div>
+        <div class="picker" id="float-colorpicker-picker" aria-hidden="true">
+          <div class="svwrap">
+            <canvas id="float-colorpicker-sv" width="210" height="140"></canvas>
+            <div class="svcursor" id="float-colorpicker-svcursor"></div>
+          </div>
+          <div class="controls">
+            <label>
+              <span>Hue</span>
+              <input type="range" id="float-colorpicker-h" min="0" max="360" step="1" value="0" />
+              <span class="mini" id="float-colorpicker-hv">0°</span>
+            </label>
+            <label>
+              <span>α</span>
+              <input type="range" id="float-colorpicker-a" min="0" max="1" step="0.01" value="1" />
+              <span class="mini" id="float-colorpicker-av">1.00</span>
+            </label>
+            <input type="color" class="hidden" id="float-colorpicker-input" value="#ff4d4d" title="Pick a color" />
+          </div>
+        </div>
+        <div class="row">
+          <code id="float-colorpicker-rgba" class="is-selected">rgba(255, 77, 77, 1)</code>
+          <code id="float-colorpicker-hsla">hsla(0, 100%, 65%, 1)</code>
+          <code id="float-colorpicker-hex8">#ff4d4dff</code>
+          <button type="button" id="float-colorpicker-copy">Copy</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="float-coordpicker" id="float-coordpicker" aria-hidden="true">
+      <div class="toast" id="float-coord-toast" aria-hidden="true">Copied</div>
+      <div class="row">
+        <span class="hint">Press <b>a</b> to toggle · click=point · drag=box</span>
+      </div>
+      <div class="row">
+        <span class="hint">Scope:</span> <code id="float-coord-scope">auto</code>
+        <span class="hint">Mode:</span> <code id="float-coord-mode">point</code>
+      </div>
+      <div class="row">
+        <span class="hint">XY:</span> <code id="float-coord-xy">(0.00,0.00)</code>
+        <button type="button" id="float-coord-copy-pt">Copy point</button>
+      </div>
+      <div class="row">
+        <code id="float-coord-snippet" style="flex:1;min-width:260px"></code>
+        <button type="button" id="float-coord-copy">Copy code</button>
+      </div>
+    </div>
+    <div class="float-coord-crosshair" id="float-coord-crosshair" aria-hidden="true"><div class="v"></div><div class="h"></div></div>
+    <div class="float-coord-box" id="float-coord-box" aria-hidden="true"></div>
+
+    <script>
+      (function() {
+        const panel = document.getElementById('float-colorpicker');
+        const input = document.getElementById('float-colorpicker-input');
+        const swatchBtn = document.getElementById('float-colorpicker-swatch');
+        const preview = document.getElementById('float-colorpicker-preview');
+        const picker = document.getElementById('float-colorpicker-picker');
+        const sv = document.getElementById('float-colorpicker-sv');
+        const svCursor = document.getElementById('float-colorpicker-svcursor');
+        const hue = document.getElementById('float-colorpicker-h');
+        const hueV = document.getElementById('float-colorpicker-hv');
+        const alpha = document.getElementById('float-colorpicker-a');
+        const alphaV = document.getElementById('float-colorpicker-av');
+        const rgbaEl = document.getElementById('float-colorpicker-rgba');
+        const hslaEl = document.getElementById('float-colorpicker-hsla');
+        const hex8El = document.getElementById('float-colorpicker-hex8');
+        const copyBtn = document.getElementById('float-colorpicker-copy');
+        if (!panel || !input || !swatchBtn || !preview || !picker || !sv || !svCursor || !hue || !hueV || !alpha || !alphaV || !rgbaEl || !hslaEl || !hex8El || !copyBtn) return;
+
+        let current = 'rgba'; // 'rgba' | 'hsla' | 'hex8'
+
+        function setEditing(on) {
+          panel.classList.toggle('is-editing', !!on);
+          picker.setAttribute('aria-hidden', on ? 'false' : 'true');
+        }
+
+        function clamp01(x) {
+          const n = Number(x);
+          if (!Number.isFinite(n)) return 1;
+          return Math.max(0, Math.min(1, n));
+        }
+
+        function clamp(x, lo, hi) { return Math.max(lo, Math.min(hi, x)); }
+
+        function hex2(n) {
+          const s = Number(n).toString(16);
+          return s.length === 1 ? '0' + s : s;
+        }
+
+        function parseHex6(hex) {
+          const h = String(hex || '').trim().toLowerCase();
+          const m = /^#([0-9a-f]{6})$/.exec(h);
+          if (!m) return null;
+          const v = m[1];
+          const r = parseInt(v.slice(0, 2), 16);
+          const g = parseInt(v.slice(2, 4), 16);
+          const b = parseInt(v.slice(4, 6), 16);
+          return { r, g, b, hex: h };
+        }
+
+        function rgbToHsl(r, g, b) {
+          r /= 255; g /= 255; b /= 255;
+          const max = Math.max(r, g, b), min = Math.min(r, g, b);
+          let h = 0, s = 0;
+          const l = (max + min) / 2;
+          if (max !== min) {
+            const d = max - min;
+            s = l > 0.5 ? d / (2 - max - min) : d / (max + min);
+            switch (max) {
+              case r: h = (g - b) / d + (g < b ? 6 : 0); break;
+              case g: h = (b - r) / d + 2; break;
+              case b: h = (r - g) / d + 4; break;
+            }
+            h *= 60;
+          }
+          return { h, s, l };
+        }
+
+        function rgbToHsv(r, g, b) {
+          r /= 255; g /= 255; b /= 255;
+          const max = Math.max(r, g, b), min = Math.min(r, g, b);
+          const d = max - min;
+          let h = 0;
+          if (d !== 0) {
+            switch (max) {
+              case r: h = (g - b) / d + (g < b ? 6 : 0); break;
+              case g: h = (b - r) / d + 2; break;
+              case b: h = (r - g) / d + 4; break;
+            }
+            h *= 60;
+          }
+          const s = max === 0 ? 0 : d / max;
+          const v = max;
+          return { h, s, v };
+        }
+
+        function hsvToRgb(h, s, v) {
+          const c = v * s;
+          const hh = (h % 360) / 60;
+          const x = c * (1 - Math.abs((hh % 2) - 1));
+          let r1 = 0, g1 = 0, b1 = 0;
+          if (0 <= hh && hh < 1) { r1 = c; g1 = x; b1 = 0; }
+          else if (1 <= hh && hh < 2) { r1 = x; g1 = c; b1 = 0; }
+          else if (2 <= hh && hh < 3) { r1 = 0; g1 = c; b1 = x; }
+          else if (3 <= hh && hh < 4) { r1 = 0; g1 = x; b1 = c; }
+          else if (4 <= hh && hh < 5) { r1 = x; g1 = 0; b1 = c; }
+          else { r1 = c; g1 = 0; b1 = x; }
+          const m = v - c;
+          return {
+            r: Math.round((r1 + m) * 255),
+            g: Math.round((g1 + m) * 255),
+            b: Math.round((b1 + m) * 255),
+          };
+        }
+
+        function drawSV(hDeg) {
+          const ctx = sv.getContext('2d');
+          if (!ctx) return;
+          const w = sv.width, h = sv.height;
+          const base = hsvToRgb(hDeg, 1, 1);
+          ctx.clearRect(0, 0, w, h);
+          ctx.fillStyle = `rgb(${base.r}, ${base.g}, ${base.b})`;
+          ctx.fillRect(0, 0, w, h);
+          const gWhite = ctx.createLinearGradient(0, 0, w, 0);
+          gWhite.addColorStop(0, 'rgba(255,255,255,1)');
+          gWhite.addColorStop(1, 'rgba(255,255,255,0)');
+          ctx.fillStyle = gWhite;
+          ctx.fillRect(0, 0, w, h);
+          const gBlack = ctx.createLinearGradient(0, 0, 0, h);
+          gBlack.addColorStop(0, 'rgba(0,0,0,0)');
+          gBlack.addColorStop(1, 'rgba(0,0,0,1)');
+          ctx.fillStyle = gBlack;
+          ctx.fillRect(0, 0, w, h);
+        }
+
+        let state = { h: 0, s: 1, v: 1, a: 1 };
+
+        function setFromHex(hex) {
+          const parsed = parseHex6(hex);
+          if (!parsed) return;
+          const hsv = rgbToHsv(parsed.r, parsed.g, parsed.b);
+          state.h = hsv.h;
+          state.s = hsv.s;
+          state.v = hsv.v;
+          hue.value = String(Math.round(state.h));
+          drawSV(state.h);
+          positionCursor();
+          renderOutputs();
+        }
+
+        function positionCursor() {
+          const x = state.s * sv.width;
+          const y = (1 - state.v) * sv.height;
+          svCursor.style.left = `${x}px`;
+          svCursor.style.top = `${y}px`;
+        }
+
+        function setCurrent(kind) {
+          current = kind;
+          rgbaEl.classList.toggle('is-selected', kind === 'rgba');
+          hslaEl.classList.toggle('is-selected', kind === 'hsla');
+          hex8El.classList.toggle('is-selected', kind === 'hex8');
+        }
+
+        function renderOutputs() {
+          const rgb = hsvToRgb(state.h, state.s, state.v);
+          panel.style.setProperty('--float-alpha-rgb', `${rgb.r}, ${rgb.g}, ${rgb.b}`);
+          const a = clamp01(alpha.value);
+          state.a = a;
+          const aTxt = a.toFixed(2);
+          alphaV.textContent = aTxt;
+          hueV.textContent = `${Math.round(state.h)}°`;
+          const rgba = `rgba(${rgb.r}, ${rgb.g}, ${rgb.b}, ${aTxt})`;
+          rgbaEl.textContent = rgba;
+          const hsl = rgbToHsl(rgb.r, rgb.g, rgb.b);
+          const hs = Math.round(hsl.s * 100);
+          const hl = Math.round(hsl.l * 100);
+          const hh = Math.round(hsl.h);
+          hslaEl.textContent = `hsla(${hh}, ${hs}%, ${hl}%, ${aTxt})`;
+          const a255 = Math.round(a * 255);
+          const hex = `#${hex2(rgb.r)}${hex2(rgb.g)}${hex2(rgb.b)}`;
+          hex8El.textContent = `${hex}${hex2(a255)}`;
+          preview.style.background = rgba;
+          input.value = hex;
+        }
+
+        function valueToCopy() {
+          if (current === 'hex8') return hex8El.textContent || '';
+          if (current === 'hsla') return hslaEl.textContent || '';
+          return rgbaEl.textContent || '';
+        }
+
+        function svFromEvent(ev) {
+          const rect = sv.getBoundingClientRect();
+          const x = clamp(ev.clientX - rect.left, 0, rect.width);
+          const y = clamp(ev.clientY - rect.top, 0, rect.height);
+          state.s = clamp01(x / rect.width);
+          state.v = clamp01(1 - (y / rect.height));
+          positionCursor();
+          renderOutputs();
+        }
+
+        let dragging = false;
+        sv.addEventListener('pointerdown', (ev) => {
+          dragging = true;
+          sv.setPointerCapture(ev.pointerId);
+          svFromEvent(ev);
+        });
+        sv.addEventListener('pointermove', (ev) => { if (dragging) svFromEvent(ev); });
+        sv.addEventListener('pointerup', () => { dragging = false; });
+        sv.addEventListener('pointercancel', () => { dragging = false; });
+
+        hue.addEventListener('input', () => {
+          state.h = Number(hue.value) || 0;
+          drawSV(state.h);
+          renderOutputs();
+        });
+        alpha.addEventListener('input', renderOutputs);
+
+        swatchBtn.addEventListener('click', () => {
+          setEditing(!panel.classList.contains('is-editing'));
+          if (panel.classList.contains('is-editing')) {
+            drawSV(state.h);
+            positionCursor();
+          }
+        });
+        input.addEventListener('input', () => setFromHex(input.value));
+
+        setFromHex(input.value);
+        renderOutputs();
+        setCurrent('rgba');
+
+        async function copyCurrent() {
+          const text = valueToCopy() || input.value;
+          try {
+            await navigator.clipboard.writeText(text);
+            copyBtn.textContent = 'Copied';
+            setTimeout(() => (copyBtn.textContent = 'Copy'), 900);
+          } catch (e) {
+            // Fallback: prompt lets user copy manually
+            window.prompt('Copy color:', text);
+          }
+        }
+
+        copyBtn.addEventListener('click', copyCurrent);
+        rgbaEl.addEventListener('click', () => { setCurrent('rgba'); copyCurrent(); });
+        hslaEl.addEventListener('click', () => { setCurrent('hsla'); copyCurrent(); });
+        hex8El.addEventListener('click', () => { setCurrent('hex8'); copyCurrent(); });
+
+        function toggle() {
+          const open = panel.classList.toggle('is-open');
+          panel.setAttribute('aria-hidden', open ? 'false' : 'true');
+          if (!open) setEditing(false);
+        }
+
+        document.addEventListener('keydown', (ev) => {
+          if (ev.key === 'c' || ev.key === 'C') {
+            // Avoid fighting with Reveal's "controls" / other inputs
+            if (ev.target && (ev.target.tagName === 'INPUT' || ev.target.tagName === 'TEXTAREA')) return;
+            toggle();
+          }
+        });
+      })();
+    </script>
+
+    <script>
+      (function() {
+        const panel = document.getElementById('float-coordpicker');
+        const cross = document.getElementById('float-coord-crosshair');
+        const box = document.getElementById('float-coord-box');
+        const scopeEl = document.getElementById('float-coord-scope');
+        const modeEl = document.getElementById('float-coord-mode');
+        const xyEl = document.getElementById('float-coord-xy');
+        const snipEl = document.getElementById('float-coord-snippet');
+        const copyPtBtn = document.getElementById('float-coord-copy-pt');
+        const copyBtn = document.getElementById('float-coord-copy');
+        const toast = document.getElementById('float-coord-toast');
+        if (!panel || !cross || !box || !scopeEl || !modeEl || !xyEl || !snipEl || !copyPtBtn || !copyBtn || !toast) return;
+
+        let open = false;
+        let lastTarget = null;
+        let dragStart = null; // drag state
+        let didDrag = false;
+        let toastTimer = null;
+
+        function fmt01(v) {
+          const x = Math.max(-9, Math.min(9, v));
+          return (Math.round(x * 100) / 100).toFixed(2);
+        }
+        function clamp01(v) { return Math.max(0, Math.min(1, v)); }
+        function dist2(ax, ay, bx, by) {
+          const dx = ax - bx, dy = ay - by;
+          return dx*dx + dy*dy;
+        }
+
+        function currentSlideEl() {
+          try {
+            if (window.Reveal && typeof window.Reveal.getCurrentSlide === 'function') {
+              return window.Reveal.getCurrentSlide();
+            }
+          } catch (e) {}
+          return document.querySelector('.reveal .slides section.present');
+        }
+
+        function pickTargetFromPoint(x, y) {
+          const el = document.elementFromPoint(x, y);
+          if (!el) return { scope: 'slide', el: currentSlideEl() };
+          // prefer local object coord: figure/video stage
+          const stage = el.closest && (el.closest('.float-figure__stage') || el.closest('.float-video'));
+          if (stage) return { scope: stage.classList.contains('float-video') ? 'video' : 'figure', el: stage };
+          const box = el.closest && el.closest('.float-container');
+          if (box) return { scope: 'box', el: box };
+          return { scope: 'slide', el: currentSlideEl() };
+        }
+
+        function normFromClient(ev, targetEl) {
+          if (!targetEl) return null;
+          const r = targetEl.getBoundingClientRect();
+          if (!r.width || !r.height) return null;
+          const nx = (ev.clientX - r.left) / r.width;
+          const ny = (ev.clientY - r.top) / r.height;
+          return { nx, ny, rect: r };
+        }
+
+        function setTargetHighlight(el) {
+          if (lastTarget && lastTarget !== el) lastTarget.classList.remove('float-coord-target');
+          lastTarget = el;
+          if (el) el.classList.add('float-coord-target');
+        }
+
+        function makeSnippet(tool, p, p2) {
+          const t = String(tool || 'point');
+          const q = (x, y) => '(' + fmt01(x) + ',' + fmt01(y) + ')';
+          if (t === 'point') return q(p.nx, p.ny);
+          if (t === 'rect') {
+            if (!p2) return q(p.nx, p.ny) + ' (x2,y2)';
+            return q(p.nx, p.ny) + ' ' + q(p2.nx, p2.ny);
+          }
+          return q(p.nx, p.ny);
+        }
+
+        async function copyText(t) {
+          try {
+            await navigator.clipboard.writeText(t);
+            return true;
+          } catch (e) {
+            window.prompt('Copy:', t);
+            return false;
+          }
+        }
+
+        function showToast(msg) {
+          try {
+            toast.textContent = msg || 'Copied';
+            toast.classList.add('is-on');
+            toast.setAttribute('aria-hidden', 'false');
+            if (toastTimer) window.clearTimeout(toastTimer);
+            toastTimer = window.setTimeout(() => {
+              toast.classList.remove('is-on');
+              toast.setAttribute('aria-hidden', 'true');
+            }, 650);
+          } catch (e) {}
+        }
+
+        // Auto-copy (throttled) to avoid spamming clipboard.
+        let lastCopyAt = 0;
+        let lastCopyText = '';
+        function autoCopy(t) {
+          const now = Date.now();
+          if (!t || t === lastCopyText) return;
+          if (now - lastCopyAt < 220) return;
+          lastCopyAt = now;
+          lastCopyText = t;
+          navigator.clipboard && navigator.clipboard.writeText && navigator.clipboard.writeText(t).catch(() => { });
+        }
+
+        function refreshUI(ev) {
+          if (!open) return;
+          if (ev && panel.contains(ev.target)) return;
+          const pick = pickTargetFromPoint(ev ? ev.clientX : (window.innerWidth/2), ev ? ev.clientY : (window.innerHeight/2));
+          const targetEl = pick.el;
+          setTargetHighlight(targetEl);
+          const norm = ev ? normFromClient(ev, targetEl) : null;
+          if (!norm) return;
+          const nx = clamp01(norm.nx);
+          const ny = clamp01(norm.ny);
+          xyEl.textContent = '(' + fmt01(nx) + ',' + fmt01(ny) + ')';
+          scopeEl.textContent = pick.scope;
+          modeEl.textContent = (dragStart && didDrag) ? 'box' : 'point';
+
+          // Click/drag is the "mode": click copies point; drag copies box coords.
+          let snip = '';
+          if (dragStart && didDrag) {
+            snip = makeSnippet('rect', dragStart.p, { nx, ny });
+          } else {
+            snip = makeSnippet('point', { nx, ny }, null);
+          }
+          snipEl.textContent = snip;
+
+          // crosshair
+          const v = cross.querySelector('.v');
+          const h = cross.querySelector('.h');
+          if (v) v.style.left = ev.clientX + 'px';
+          if (h) h.style.top = ev.clientY + 'px';
+        }
+
+        function setOpen(on) {
+          open = !!on;
+          panel.classList.toggle('is-open', open);
+          cross.classList.toggle('is-open', open);
+          panel.setAttribute('aria-hidden', open ? 'false' : 'true');
+          document.body.classList.toggle('float-coordpicker-open', open);
+          if (!open) {
+            box.classList.remove('is-open');
+            if (lastTarget) lastTarget.classList.remove('float-coord-target');
+            lastTarget = null;
+            dragStart = null;
+            didDrag = false;
+            modeEl.textContent = 'point';
+          }
+        }
+
+        // Prevent native image/video dragging while the picker is open.
+        document.addEventListener('dragstart', (ev) => {
+          if (!open) return;
+          ev.preventDefault();
+        }, true);
+
+        document.addEventListener('keydown', (ev) => {
+          if (ev.key === 'a' || ev.key === 'A') {
+            if (ev.target && (ev.target.tagName === 'INPUT' || ev.target.tagName === 'TEXTAREA' || ev.target.isContentEditable)) return;
+            setOpen(!open);
+          }
+          if (open && ev.key === 'Escape') setOpen(false);
+        });
+
+        document.addEventListener('mousemove', (ev) => {
+          if (!open) return;
+          refreshUI(ev);
+          if (dragStart) {
+            if (!didDrag) {
+              // Switch into "rect" mode once the user actually drags.
+              if (dist2(ev.clientX, ev.clientY, dragStart.clientX, dragStart.clientY) >= (4*4)) {
+                didDrag = true;
+              }
+            }
+            const x0 = dragStart.clientX, y0 = dragStart.clientY;
+            const x1 = ev.clientX, y1 = ev.clientY;
+            const left = Math.min(x0, x1), top = Math.min(y0, y1);
+            const w = Math.abs(x1 - x0), h = Math.abs(y1 - y0);
+            box.classList.add('is-open');
+            box.style.left = left + 'px';
+            box.style.top = top + 'px';
+            box.style.width = w + 'px';
+            box.style.height = h + 'px';
+          }
+        });
+
+        document.addEventListener('mousedown', (ev) => {
+          if (!open) return;
+          if (ev.button !== 0) return;
+          if (panel.contains(ev.target)) return;
+          // Stop the browser from "dragging" images/videos while we draw selection boxes.
+          ev.preventDefault();
+          didDrag = false;
+          const pick = pickTargetFromPoint(ev.clientX, ev.clientY);
+          const norm = normFromClient(ev, pick.el);
+          if (!norm) return;
+          dragStart = {
+            clientX: ev.clientX,
+            clientY: ev.clientY,
+            p: { nx: clamp01(norm.nx), ny: clamp01(norm.ny) },
+            scope: pick.scope,
+            el: pick.el
+          };
+        });
+
+        document.addEventListener('mouseup', (ev) => {
+          if (!open) return;
+          if (ev.button !== 0) return;
+          if (!dragStart) return;
+          const pick = pickTargetFromPoint(ev.clientX, ev.clientY);
+          const norm = normFromClient(ev, dragStart.el || pick.el);
+          if (norm) {
+            const p2 = { nx: clamp01(norm.nx), ny: clamp01(norm.ny) };
+            if (didDrag) {
+              snipEl.textContent = makeSnippet('rect', dragStart.p, p2);
+              autoCopy(snipEl.textContent);
+              showToast('Copied box');
+            } else {
+              // Treat as a click: copy point.
+              snipEl.textContent = makeSnippet('point', p2, null);
+              autoCopy(snipEl.textContent);
+              showToast('Copied point');
+            }
+          }
+          dragStart = null;
+          didDrag = false;
+          box.classList.remove('is-open');
+        });
+
+        copyPtBtn.addEventListener('click', () => copyText(xyEl.textContent));
+        copyBtn.addEventListener('click', async () => {
+          const t = snipEl.textContent || '';
+          await copyText(t);
+          copyBtn.textContent = 'Copied';
+          setTimeout(() => (copyBtn.textContent = 'Copy code'), 900);
+        });
+      })();
+    </script>
+
+  </body>
+</html>
