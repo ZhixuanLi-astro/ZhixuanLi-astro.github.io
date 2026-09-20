@@ -349,6 +349,45 @@ $\,$
 ### results —— {c:rgb(153,0,255)|Vapor comparison}
 :::
 
+
+
+:::float-figure x=0.071 y=0.124 w=0.850 src=images/vap_comp.png caption=""
+:::
+--
+:::anno
+\rect (0.000,0.982) (1.000,0.999) c=rgba(0,0,0,0) fill=rgb(153,0,255)
+\rect (0.009,0.090) (0.504,0.094) c=rgba(0,0,0,0) fill=rgb(153,0,255)
+:::
+
+:::float-figure x=0.723 y=0.869 w=0.282 src=images/tsinghuabuilding.png caption=""
+:::
+:::float-text x=0.009 y=0.014 w=0.76
+### results —— {c:rgb(153,0,255)|Vapor comparison}
+:::
+
+:::float-text x=0.067 y=0.698 w=0.40 fs=35
+* {fw:bold|Vapor reservoir extended to outer disk}
+
+:::
+
+
+:::float-figure x=0.071 y=0.124 w=0.850 src=images/vap_comp.png caption=""
+\rect (0.171,0.102) (0.469,0.504) c=rgb(95,0,158) fill=rgba(153,0,255,0.05)
+\rect (0.615,0.102) (0.913,0.504) c=rgb(95,0,158) fill=rgba(153,0,255,0.05)
+:::
+--
+:::anno
+\rect (0.000,0.982) (1.000,0.999) c=rgba(0,0,0,0) fill=rgb(153,0,255)
+\rect (0.009,0.090) (0.504,0.094) c=rgba(0,0,0,0) fill=rgb(153,0,255)
+\rect (0.496,0.693) (0.935,0.917) c=rgb(95,0,158) fill=rgba(153,0,255,0.05)
+:::
+
+:::float-figure x=0.723 y=0.869 w=0.282 src=images/tsinghuabuilding.png caption=""
+:::
+:::float-text x=0.009 y=0.014 w=0.76
+### results —— {c:rgb(153,0,255)|Vapor comparison}
+:::
+
 :::float-text x=0.067 y=0.698 w=0.40 fs=35
 * {fw:bold|Vapor reservoir extended to outer disk}
 $\,$
