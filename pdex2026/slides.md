@@ -164,7 +164,7 @@
 :::float-text x=0.556 y=0.205 w=0.366
 1. {fw:bold;fs:35|Surface area} {fs:32|dicides the sublimation/condensation. Big pebbles dominant in mass, small dust dominant in surface area.}
 
- {fw:bold;fs:35|Observationally:} {fs:32|Small dust lies in higher region, affects water reservoir at upper layer. }
+2. {fw:bold;fs:35|Observationally:} {fs:32|Small dust lies in higher region, affects water reservoir at upper layer. }
 :::
 :::float-figure x=0.527 y=0.592 w=0.470 src=images/waterobs.png caption="Colmenares et al. 2026"
 
@@ -373,6 +373,7 @@ $\,$
 :::anno
 \rect (0.000,0.982) (1.000,0.999) c=rgba(0,0,0,0) fill=rgb(153,0,255)
 \rect (0.009,0.090) (0.504,0.094) c=rgba(0,0,0,0) fill=rgb(153,0,255)
+\rect (0.001,0.141) (1.000,0.696) c=rgba(0,0,0,0) fill=rgba(183,183,183,0.18) bg=rgba(0,0,0,0)
 :::
 
 :::float-figure x=0.723 y=0.869 w=0.282 src=images/tsinghuabuilding.png caption=""
@@ -407,7 +408,7 @@ $\,$
 :::float-figure x=0.337 y=0.207 w=0.654 src=images/vap_comp.png caption=""
 :::
 
-:::float-text x=0.040 y=0.721 w=0.40
+:::float-text x=0.034 y=0.752 w=0.40
 # {c:rgba(153,0,255,1)|THANK YOU}
 :::
 
