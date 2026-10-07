@@ -16,7 +16,6 @@
 :::
 
 
-
 :::float-figure y=0.015 w=0.059 src=images/tsinghualogo.png caption="" x=0.864 id=fig2
 :::
 
@@ -28,7 +27,7 @@
 
 :::anno
 \rect (0.000,0.990) (1.000,0.999) c=rgba(0,0,0,0) fill=rgb(153,0,255)
-\rect (0.000,0.164) (1.000,0.719) c=rgba(0,0,0,0) fill=rgba(183,183,183,0.18) bg=rgba(0,0,0,0)
+\rect (0.000,0.163) (1.000,0.718) c=rgba(0,0,0,0) fill=rgba(183,183,183,0.18) bg=rgba(0,0,0,0)
 :::
 
 :::anno
