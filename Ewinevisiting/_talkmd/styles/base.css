@@ -1,0 +1,371 @@
+/* Base utilities used by the markdown preprocessor directives (:::float-text/:::float-figure/:::float-video) */
+
+/*
+  IMPORTANT:
+  Do NOT override `.reveal .slides section { position: absolute; }` from Reveal.
+  Changing it breaks slide layout (can look like content "runs everywhere").
+*/
+
+/*
+  Reveal's slide <section> elements are position:absolute but don't have an explicit height.
+  Percentage-based y positioning (top: 20%) for float-text needs a definite containing-block height.
+*/
+.reveal .slides > section,
+.reveal .slides > section > section {
+  height: 100%;
+}
+
+.float-container {
+  /* Positioned container that clips its children (used by :::float-box). */
+  position: absolute;
+  box-sizing: border-box;
+  overflow: hidden;
+}
+
+.float-flow {
+  position: absolute;
+  /* Use inline-flex so the container shrink-to-fits its contents when width is auto. */
+  display: inline-flex;
+  flex-direction: column;
+  /* Flow container only stacks; item widths are controlled per-item. */
+  align-items: flex-start;
+  /* Default sibling spacing (positive only). For negative overlap, use vspace=... (implemented via margins). */
+  gap: 0.35em;
+  --float-vspace: 0em;
+  pointer-events: auto;
+}
+
+/* Flow items: reuse existing float-* renderers but disable absolute positioning
+   for the *direct children* of the flow container only.
+   IMPORTANT: do NOT apply to nested floats (e.g. floats inside a float-box),
+   otherwise their absolute positioning breaks. */
+.float-flow > .float-box,
+.float-flow > .float-container,
+.float-flow > .float-figure,
+.float-flow > .float-video,
+.magnet-core > .float-box,
+.magnet-core > .float-container,
+.magnet-core > .float-figure,
+.magnet-core > .float-video,
+.magnet-dock > .float-box,
+.magnet-dock > .float-container,
+.magnet-dock > .float-figure,
+.magnet-dock > .float-video,
+.magnet-dock > .magnet-cell {
+  position: relative !important;
+  left: auto !important;
+  top: auto !important;
+}
+.magnet-core > .float-box,
+.magnet-dock > .float-box,
+.float-flow > .float-box {
+  max-width: none;
+}
+
+/* In flow mode, spacing should be controlled by the container's `gap`.
+   Zero out default margins on common items (videos had a default top margin). */
+.float-flow > .float-figure,
+.float-flow > .float-video {
+  margin: 0 !important;
+}
+
+.float-flow > .float-figure figcaption {
+  margin: 0 !important;
+}
+
+/* Per-chain vertical spacing override (vspace=...):
+   Apply after the margin resets above so it can override them (including negative overlap). */
+.float-flow.float-flow > * + * {
+  margin-top: var(--float-vspace) !important;
+}
+
+.magnet-cell {
+  position: relative;
+  display: inline-block;
+  vertical-align: top;
+}
+.magnet-core {
+  position: relative;
+}
+.magnet-slot {
+  position: absolute;
+  width: 0;
+  height: 0;
+  overflow: visible;
+  pointer-events: none;
+}
+.magnet-dock {
+  position: absolute;
+  pointer-events: auto;
+}
+.magnet-slot--bottom {
+  left: 0;
+  top: 100%;
+  margin-top: 0.35em;
+}
+.magnet-slot--bottom .magnet-dock {
+  top: 0;
+  left: var(--magnet-along, 0px);
+}
+.magnet-slot--top {
+  left: 0;
+  bottom: 100%;
+  margin-bottom: 0.35em;
+}
+.magnet-slot--top .magnet-dock {
+  bottom: 0;
+  left: var(--magnet-along, 0px);
+}
+.magnet-slot--right {
+  left: 100%;
+  top: 0;
+  margin-left: 0.35em;
+}
+.magnet-slot--right .magnet-dock {
+  left: 0;
+  top: var(--magnet-along, 0px);
+}
+.magnet-slot--left {
+  right: 100%;
+  top: 0;
+  margin-right: 0.35em;
+}
+.magnet-slot--left .magnet-dock {
+  right: 0;
+  top: var(--magnet-along, 0px);
+}
+
+.float-box {
+  position: absolute;
+  box-sizing: border-box;
+  display: inline-block;
+  /* Minimal by default: no border/background/scrollbars unless you add them via style=... */
+  padding: 0;
+  border: none;
+  border-radius: 0;
+  background: transparent;
+  overflow: visible;
+  max-width: 90%;
+}
+
+/* Make Markdown inside boxes predictable (don't inherit giant Reveal heading styles). */
+.float-box h1,
+.float-box h2,
+.float-box h3,
+.float-box p,
+.float-box ul,
+.float-box ol {
+  margin: 0;
+  line-height: 1.15;
+}
+
+/* Only scale headings when fs=... is specified (so headings remain "normal" otherwise). */
+.float-box.float-box--fs h1 { font-size: 1.6em; }
+.float-box.float-box--fs h2 { font-size: 1.3em; }
+.float-box.float-box--fs h3 { font-size: 1.1em; }
+
+.float-box ul,
+.float-box ol {
+  padding-left: 1.1em;
+}
+
+/* Optional: wrap code blocks inside a float-text box (no horizontal scrolling). */
+.float-box.float-wrap pre,
+.float-box.float-wrap code {
+  max-width: 100%;
+  white-space: pre-wrap;
+  overflow-wrap: anywhere;
+  word-break: break-word;
+}
+
+/* Inline code (not code blocks): nicer "pill" highlight.
+   NOTE: Reveal themes may style `code`, and the theme CSS can be loaded after this file.
+   We intentionally use higher specificity + !important for the key properties so inline code
+   stays consistent without changing the theme's headings/colors. */
+.reveal .slides section :not(pre) > code {
+  display: inline-block !important;
+  padding: 0.10em 0.28em !important;
+  border-radius: 0.28em !important;
+  border: 1px solid rgba(255, 255, 255, 0.14) !important;
+  background: rgba(239,191,4, 0.8) !important;
+  color: rgba(255, 255, 255, 0.92) !important;
+  font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace !important;
+  font-size: 0.9em !important;
+  line-height: 1.15 !important;
+  vertical-align: baseline;
+}
+
+.reveal .slides section :not(pre) > code a {
+  color: inherit;
+}
+
+.float-figure {
+  /* Default: left-aligned with tighter spacing */
+  margin: 0;
+  padding: 0;
+  text-align: left;
+  line-height: 0;
+}
+
+.float-figure.float-abs {
+  position: absolute;
+  margin: 0;
+  text-align: left;
+  max-width: 90%;
+}
+
+.float-figure img {
+  /* Avoid inline-image baseline gap so borders sit flush against the image */
+  display: block;
+  /* Reveal themes often add margins to images; float-figure spacing should be controlled by box/flow layout. */
+  margin: 0 !important;
+  border: 0 !important;
+  box-shadow: none !important;
+  background: none !important;
+  max-width: 100%;
+  height: auto;
+}
+
+.float-figure__stage {
+  position: relative;
+  display: block;
+  max-width: 100%;
+  padding: 0;
+  margin: 0;
+  line-height: 0;
+  box-sizing: border-box;
+  /* Allow annotations to extend beyond the image box */
+  overflow: visible;
+}
+
+.float-figure__stage > img {
+  width: 100%;
+  height: auto;
+  border-radius: inherit;
+}
+
+/* Generic annotation overlay (used by figure-body annotation lines and :::anno). */
+.float-anno,
+.float-figure__anno {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  /* Don't clip annotations whose coordinates fall outside [0,1] */
+  overflow: visible;
+}
+
+/* Standalone annotation container (:::anno). */
+.float-anno-box {
+  position: absolute;
+  pointer-events: none;
+}
+
+.float-anno-label {
+  position: absolute;
+  /* Allow selecting/copying text inside labels. */
+  pointer-events: auto;
+  user-select: text;
+  -webkit-user-select: text;
+  cursor: text;
+  padding: 0.18em 0.42em;
+  line-height: 1.1;
+  white-space: nowrap;
+  box-shadow: 0 2px 10px rgba(0,0,0,0.25);
+}
+
+.float-figure.float-abs img {
+  width: 100%;
+  max-height: 100%;
+  object-fit: contain;
+}
+
+.float-figure figcaption {
+  margin: 0 !important;
+  padding: 5px 0 0;
+  font-size: 0.5em;
+  line-height: 1.25;
+  opacity: 0.9;
+}
+
+.float-figure figcaption > *,
+.float-video__caption > * {
+  margin: 0 !important;
+  padding: 0;
+}
+
+.float-figure.float-missing-asset .float-figure__stage,
+.float-video.float-missing-asset .float-video__el {
+  outline: 2px dashed #e85d5d;
+  background: rgba(232, 93, 93, 0.08);
+}
+
+.float-video {
+  display: block;
+  margin: 0.2em auto 0;
+  max-width: 100%;
+  text-align: left;
+}
+
+/* Annotation base for videos: mirrors .float-figure__stage so anno overlays use
+   the video box itself as their coordinate base (caption sits outside the stage). */
+.float-video__stage {
+  position: relative;
+  display: block;
+  max-width: 100%;
+  padding: 0;
+  margin: 0;
+  line-height: 0;
+  box-sizing: border-box;
+  /* Allow annotations to extend beyond the video box */
+  overflow: visible;
+}
+
+.float-video__el {
+  display: block;
+  width: 100%;
+  height: auto;
+  max-width: 100%;
+  max-height: 100%;
+}
+
+.float-video video {
+  /* Reveal themes may add margins to media; keep float-video spacing predictable. */
+  margin: 0;
+}
+
+.float-video.float-abs {
+  position: absolute;
+  margin: 0;
+  max-width: 90%;
+  object-fit: contain;
+  text-align: left;
+}
+
+.float-video__caption {
+  margin: 0 !important;
+  padding: 5px 0 0;
+  font-size: 0.5em;
+  line-height: 1.25;
+  opacity: 0.9;
+}
+
+/* Per-slide palette-only theme (fonts stay the same). */
+.reveal .slides section[data-theme="dark"] {
+  color: rgba(255,255,255,0.92);
+}
+.reveal .slides section[data-theme="dark"] :is(h1,h2,h3,h4,h5,h6) {
+  color: rgba(255,255,255,0.98);
+}
+.reveal .slides section[data-theme="dark"] a { color: #7fd3ff; }
+
+.reveal .slides section[data-theme="light"] {
+  color: rgba(0,0,0,0.88);
+}
+.reveal .slides section[data-theme="light"] :is(h1,h2,h3,h4,h5,h6) {
+  color: rgba(0,0,0,0.96);
+}
+.reveal .slides section[data-theme="light"] a { color: #0b63ce; }
+
+
