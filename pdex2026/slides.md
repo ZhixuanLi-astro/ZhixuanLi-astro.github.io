@@ -206,31 +206,7 @@
 :::float-figure x=-5 y=0.195 w=0.5 src=images/snowline_sketch2.png 
 :::
 
--- 
-:::anno
-\rect (0.000,0.982) (1.000,0.999) c=rgba(0,0,0,0) fill=rgb(153,0,255)
-\rect (0.009,0.090) (0.504,0.094) c=rgba(0,0,0,0) fill=rgb(153,0,255)
-:::
 
-:::float-figure x=0.723 y=0.869 w=0.282 src=images/tsinghuabuilding.png caption=""
-:::
-:::float-text x=0.009 y=0.014 w=0.76
-### Dust Size Distribution 
-:::
-
-:::float-figure x=0.019 y=0.406 w=0.530 src=images/mass_flux.png caption="Krijt et al. 2025"
-:::
-
-
-
-:::float-text x=0.556 y=0.205 w=0.366
-1. {fw:bold;fs:35|Surface area} {fs:32|dicides the sublimation/condensation. Big pebbles dominant in mass, small dust dominant in surface area.}
-
-2. {fw:bold;fs:35|Observationally:} {fs:32|Small dust lies in higher region, affects water reservoir at upper layer. }
-:::
-:::float-figure x=0.019 y=0.138 w=0.470 src=images/waterobs.png caption="Colmenares et al. 2026"
-
-:::
 
 --
 :::anno
@@ -322,8 +298,8 @@ $\,$
 (mm - cm)
 :::
 
-:::float-text x=0.166 y=0.766 w=0.40 fs=28
-($\mu$m)
+:::float-text x=0.166 y=0.766 w=0.40 fs=26
+(~$100 \mu$m)
 :::
 
 
