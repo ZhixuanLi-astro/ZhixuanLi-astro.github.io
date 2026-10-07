@@ -66,10 +66,50 @@
 :::float-figure x=0.723 y=0.869 w=0.282 src=images/tsinghuabuilding.png caption=""
 :::
 :::float-text x=0.009 y=0.014 w=0.76
+### Water Snowline —— {c:rgba(153,0,255,1)|Observation}
+:::
+
+:::float-text x=0.594 y=0.197 fs=35 w=0.406
+* {fs:32|Help constrain the disk properties, }
+{fs:32|e.g., pebble mass flux}
+:::
+:::float-figure x=0.013 y=0.168 w=0.5 src=images/waterobs.png caption="Colmenares et al. 2026"
+:::
+
+--
+:::anno
+\rect (0.000,0.982) (1.000,0.999) c=rgba(0,0,0,0) fill=rgb(153,0,255)
+\rect (0.009,0.090) (0.504,0.094) c=rgba(0,0,0,0) fill=rgb(153,0,255)
+:::
+
+:::float-figure x=0.723 y=0.869 w=0.282 src=images/tsinghuabuilding.png caption=""
+:::
+:::float-text x=0.009 y=0.014 w=0.76
+### Water Snowline —— {c:rgba(153,0,255,1)|Observation}
+:::
+
+:::float-text x=0.594 y=0.197 fs=35 w=0.406
+* {fs:32|Help constrain the disk properties, }
+{fs:32|e.g., pebble mass flux}
+:::
+:::float-figure x=0.013 y=0.168 w=0.5 src=images/waterobs.png caption="Colmenares et al. 2026"
+:::
+:::float-figure x=0.009 y=0.415 w=0.530 src=images/mass_flux.png caption="Krijt et al. 2025"
+:::
+--
+:::anno
+\rect (0.000,0.982) (1.000,0.999) c=rgba(0,0,0,0) fill=rgb(153,0,255)
+\rect (0.009,0.090) (0.504,0.094) c=rgba(0,0,0,0) fill=rgb(153,0,255)
+:::
+
+:::float-figure x=0.723 y=0.869 w=0.282 src=images/tsinghuabuilding.png caption=""
+:::
+:::float-text x=0.009 y=0.014 w=0.76
 ### Water Snowline —— {c:rgba(153,0,255,1)|Planet Birthplace}
 :::
 
-:::float-text x=0.513 y=0.20 fs=35
+:::float-text x=0.577 y=0.196 fs=35
+* {fs:32|Help constrain the disk properties, e.g., pebble mass flux}
 * {fs:32|Induce dust pile-up → Trigger Streaming Instability → Start Planet Formation}
 :::
 :::float-figure x=-5 y=0.195 w=0.5 src=images/snowline_sketch_retro.png caption=""
@@ -88,16 +128,13 @@
 ### Water Snowline —— {c:rgba(153,0,255,1)|1 D}
 :::
 
-:::float-text x=0.513 y=0.20 fs=35
-* {fs:32|Induce dust pile-up → Trigger Streaming Instability → Start Planet Formation}
-:::
 
 :::float-figure x=-5 y=0.195 w=0.5 src=images/snowline_sketch_retro.png caption=""
 :::
 
 
 
-:::float-video x=0.538 y=0.300 w=0.38 src=images/icelineDjoeke.mp4 caption="Schoonenberg & Ormel. 2017."
+:::float-video x=0.532 y=0.190 w=0.38 src=images/icelineDjoeke.mp4 caption="Schoonenberg & Ormel. 2017."
 :::
 
 
@@ -159,14 +196,39 @@
 ### Dust Size Distribution 
 :::
 
-:::float-figure x=-5 y=0.195 w=0.5 src=images/snowline_sketch2.png caption=""
-:::
+
+
 :::float-text x=0.556 y=0.205 w=0.366
 1. {fw:bold;fs:35|Surface area} {fs:32|dicides the sublimation/condensation. Big pebbles dominant in mass, small dust dominant in surface area.}
 
 2. {fw:bold;fs:35|Observationally:} {fs:32|Small dust lies in higher region, affects water reservoir at upper layer. }
 :::
-:::float-figure x=0.527 y=0.592 w=0.470 src=images/waterobs.png caption="Colmenares et al. 2026"
+:::float-figure x=-5 y=0.195 w=0.5 src=images/snowline_sketch2.png 
+:::
+
+-- 
+:::anno
+\rect (0.000,0.982) (1.000,0.999) c=rgba(0,0,0,0) fill=rgb(153,0,255)
+\rect (0.009,0.090) (0.504,0.094) c=rgba(0,0,0,0) fill=rgb(153,0,255)
+:::
+
+:::float-figure x=0.723 y=0.869 w=0.282 src=images/tsinghuabuilding.png caption=""
+:::
+:::float-text x=0.009 y=0.014 w=0.76
+### Dust Size Distribution 
+:::
+
+:::float-figure x=0.019 y=0.406 w=0.530 src=images/mass_flux.png caption="Krijt et al. 2025"
+:::
+
+
+
+:::float-text x=0.556 y=0.205 w=0.366
+1. {fw:bold;fs:35|Surface area} {fs:32|dicides the sublimation/condensation. Big pebbles dominant in mass, small dust dominant in surface area.}
+
+2. {fw:bold;fs:35|Observationally:} {fs:32|Small dust lies in higher region, affects water reservoir at upper layer. }
+:::
+:::float-figure x=0.019 y=0.138 w=0.470 src=images/waterobs.png caption="Colmenares et al. 2026"
 
 :::
 
