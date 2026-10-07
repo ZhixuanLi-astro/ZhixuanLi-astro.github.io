@@ -70,7 +70,7 @@
 :::
 
 :::float-text x=0.594 y=0.197 fs=35 w=0.406
-* {fs:32|Help constrain the disk properties, }
+* {fs:32|Constrain the disk properties, }
 {fs:32|e.g., pebble mass flux}
 :::
 :::float-figure x=0.013 y=0.168 w=0.5 src=images/waterobs.png caption="Colmenares et al. 2026"
@@ -89,7 +89,7 @@
 :::
 
 :::float-text x=0.594 y=0.197 fs=35 w=0.406
-* {fs:32|Help constrain the disk properties, }
+* {fs:32|Constrain the disk properties, }
 {fs:32|e.g., pebble mass flux}
 :::
 :::float-figure x=0.013 y=0.168 w=0.5 src=images/waterobs.png caption="Colmenares et al. 2026"
@@ -109,7 +109,7 @@
 :::
 
 :::float-text x=0.577 y=0.196 fs=35
-* {fs:32|Help constrain the disk properties, e.g., pebble mass flux}
+* {fs:32|Constrain the disk properties, e.g., pebble mass flux}
 * {fs:32|Induce dust pile-up → Trigger Streaming Instability → Start Planet Formation}
 :::
 :::float-figure x=-5 y=0.195 w=0.5 src=images/snowline_sketch_retro.png caption=""
