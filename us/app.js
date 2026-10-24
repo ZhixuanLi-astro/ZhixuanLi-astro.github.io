@@ -1,6 +1,6 @@
-import { config } from './config.js?v=2';
-import { newState, scoreFor, validateState, dayKey, rangeStart, summarize, chartSeries } from './model.js?v=2';
-import { createLocalStore, STORAGE_KEY } from './storage.js?v=2';
+import { config } from './config.js?v=3';
+import { newState, scoreFor, validateState, dayKey, rangeStart, summarize, chartSeries } from './model.js?v=3';
+import { createLocalStore, STORAGE_KEY } from './storage.js?v=3';
 
 const $ = selector => document.querySelector(selector);
 const $$ = selector => [...document.querySelectorAll(selector)];
@@ -12,7 +12,7 @@ const dateFormat = new Intl.DateTimeFormat('zh-CN', { timeZone: config.timeZone,
 const timeFormat = new Intl.DateTimeFormat('zh-CN', { timeZone: config.timeZone, hour: '2-digit', minute: '2-digit', hourCycle: 'h23' });
 const fullFormat = new Intl.DateTimeFormat('zh-CN', { timeZone: config.timeZone, year: 'numeric', month: 'long', day: 'numeric', hour: '2-digit', minute: '2-digit', hourCycle: 'h23' });
 const cloudConfigured = Boolean(config.supabaseUrl && config.supabasePublicKey);
-let state = newState(config.initialScore), store, ready = false, busy = false;
+let state = newState(config.initialScore), store, ready = false, loading = true, loadFailed = false, busy = false;
 let page = 'home', historyPerson = 'her', range = '30', visibleCount = 30;
 let activeSeries = new Set(['her', 'him']), toastTimer, unsubscribe, revision = 0;
 
@@ -31,11 +31,15 @@ function explain(error) {
 }
 
 function fatal(error) {
-  ready = false;
+  ready = false; loading = false; loadFailed = true;
   $('#fatal-message').textContent = `暂时无法读取记录：${explain(error)}。原有记录没有被覆盖。`;
   $('#fatal-banner').hidden = false;
   $('#recovery-backup').hidden = cloudConfigured;
-  updateForms();
+  render();
+}
+
+function pendingMessage() {
+  return loading ? '正在读取记录…' : loadFailed ? '读取失败，请重试' : '登录后查看记录';
 }
 
 function confirmAction(title, text, button = '确认') {
@@ -57,10 +61,11 @@ function updateForms() {
     const locked = !ready || ownScore;
     form.classList.toggle('locked', locked);
     form.querySelectorAll('input, textarea, button').forEach(el => { el.disabled = locked || busy; });
-    form.querySelector('.submit-button span').textContent = ownScore ? '这张卡由对方来记录' : !ready && cloudConfigured ? '登录后记一笔' : busy ? '正在记下…' : '记下这一笔';
+    form.querySelector('.submit-button span').textContent = !ready ? loading ? '正在读取…' : loadFailed ? '暂时无法记分' : '登录后记一笔' : ownScore ? '这张卡由对方来记录' : busy ? '正在记下…' : '记下这一笔';
     const raw = form.elements.delta.value.trim();
     const preview = $(`#preview-${person}`);
     preview.classList.remove('invalid');
+    if (!ready) { preview.textContent = pendingMessage(); return; }
     if (!raw) { preview.textContent = '每一分，都值得被认真对待。'; return; }
     const delta = Number(raw), next = scoreFor(state, person) + delta;
     const valid = /^[+-]?\d+$/.test(raw) && delta !== 0 && Math.abs(delta) <= 100 && next >= 0 && next <= 100;
@@ -74,11 +79,14 @@ function updateCards() {
     const heading = $(`[data-direction="${person}"]`); heading.replaceChildren(document.createTextNode(giver(person) + ' '));
     const arrow = document.createElement('span'); arrow.textContent = '→'; heading.append(arrow, document.createTextNode(' ' + names[person]));
     $(`[data-score-label="${person}"]`).textContent = `${names[person]}的当前分数`;
-    const score = scoreFor(state, person), output = $(`[data-score="${person}"]`);
-    output.textContent = score; output.setAttribute('aria-label', `${names[person]}的当前分数：${score}`);
-    const meter = $(`[data-meter="${person}"]`); meter.setAttribute('aria-valuenow', score); meter.setAttribute('aria-label', `${names[person]}的分数进度`); meter.firstElementChild.style.width = `${score}%`;
+    const score = ready ? scoreFor(state, person) : null, output = $(`[data-score="${person}"]`);
+    output.textContent = ready ? score : '—'; output.setAttribute('aria-label', ready ? `${names[person]}的当前分数：${score}` : pendingMessage());
+    const meter = $(`[data-meter="${person}"]`); meter.setAttribute('aria-label', `${names[person]}的分数进度`);
+    if (ready) { meter.setAttribute('aria-valuenow', score); meter.removeAttribute('aria-valuetext'); }
+    else { meter.removeAttribute('aria-valuenow'); meter.setAttribute('aria-valuetext', pendingMessage()); }
+    meter.firstElementChild.style.width = ready ? `${score}%` : '0%';
     const last = state.records.filter(r => r.person === person).at(-1);
-    $(`[data-last="${person}"]`).textContent = last ? `最近一笔 ${signed(last.delta)} 分` : '从今天开始，慢慢记录';
+    $(`[data-last="${person}"]`).textContent = !ready ? pendingMessage() : last ? `最近一笔 ${signed(last.delta)} 分` : '从今天开始，慢慢记录';
     $(`[data-legend="${person}"]`).textContent = `${names[person]}的分数`;
     $(`[data-history-person="${person}"]`).textContent = directionLabel(person);
   });
@@ -88,10 +96,14 @@ function updateCards() {
 function renderHistory() {
   $$('[data-history-person]').forEach(b => b.setAttribute('aria-pressed', String(b.dataset.historyPerson === historyPerson)));
   const rows = state.records.filter(r => r.person === historyPerson), list = $('#history-list');
-  $('#history-count').textContent = `${rows.filter(r => !r.undoOf).length} 条记录`;
+  $('#history-count').textContent = ready ? `${rows.filter(r => !r.undoOf).length} 条记录` : '— 条记录';
   $('#history-direction').textContent = `${giver(historyPerson)}给${names[historyPerson]}的评分记录`;
-  $('#history-score').textContent = scoreFor(state, historyPerson);
+  $('#history-score').textContent = ready ? scoreFor(state, historyPerson) : '—';
   list.replaceChildren();
+  if (!ready) {
+    const message = document.createElement('p'); message.className = 'empty-state'; message.textContent = pendingMessage();
+    list.append(message); $('#more-records').hidden = true; return;
+  }
   if (!rows.length) {
     const empty = document.createElement('div'); empty.className = 'empty-state';
     empty.innerHTML = '<div class="empty-symbol" aria-hidden="true">✧</div><h3>故事，从第一笔开始。</h3><p>记下一个小小的心动，或一次认真说出的在意。</p><a href="#home">去记一笔 ↗</a>';
@@ -131,15 +143,19 @@ async function undoEntry(record) {
 function renderSummary() {
   const start = rangeStart(range, state, Date.now(), config.timeZone), summary = $('#stats-summary'); summary.replaceChildren();
   ['her', 'him'].forEach(person => {
-    const stats = summarize(state, person, start), card = document.createElement('article'); card.className = 'stat-card';
+    const stats = ready ? summarize(state, person, start) : null, card = document.createElement('article'); card.className = 'stat-card';
     const title = document.createElement('h3'); title.textContent = directionLabel(person); card.append(title);
     const values = document.createElement('div'); values.className = 'stat-values';
-    [['累计加分', `+${stats.plus}`], ['累计减分', `−${stats.minus}`], ['净变化', signed(stats.net)]].forEach(([label, value]) => { const item = document.createElement('div'), small = document.createElement('small'), strong = document.createElement('strong'); small.textContent = label; strong.textContent = value; item.append(small, strong); values.append(item); });
+    [['累计加分', stats ? `+${stats.plus}` : '—'], ['累计减分', stats ? `−${stats.minus}` : '—'], ['净变化', stats ? signed(stats.net) : '—']].forEach(([label, value]) => { const item = document.createElement('div'), small = document.createElement('small'), strong = document.createElement('strong'); small.textContent = label; strong.textContent = value; item.append(small, strong); values.append(item); });
     card.append(values); summary.append(card);
   });
 }
 
 function drawChart() {
+  if (!ready) {
+    $('#score-chart').replaceChildren(); $('#chart-tooltip').hidden = true;
+    $('#chart-dates').textContent = '—'; $('#chart-caption').textContent = pendingMessage(); return;
+  }
   if (page !== 'stats') return;
   const svg = $('#score-chart'), width = svg.getBoundingClientRect().width, height = svg.getBoundingClientRect().height;
   if (width < 100) return;
@@ -204,7 +220,7 @@ function drawChart() {
   $('#chart-caption').textContent = state.records.length ? '轻触或移动到曲线上查看分数，点一下可固定详情。每一段变化，都对应一笔记录。' : `从 ${state.initialScore} 分出发，第一笔小事会成为轨迹的起点。`;
 }
 
-function render() { updateCards(); renderHistory(); renderSummary(); drawChart(); }
+function render() { $('#main').setAttribute('aria-busy', String(loading)); updateCards(); renderHistory(); renderSummary(); drawChart(); }
 
 function navigate() {
   const candidate = location.hash.slice(1); page = ['home', 'history', 'stats'].includes(candidate) ? candidate : 'home';
@@ -278,12 +294,13 @@ $('#import-file').addEventListener('change', async event => {
 });
 $('#login-form').addEventListener('submit', async event => {
   event.preventDefault(); const form = event.currentTarget, submit = form.querySelector('button'); submit.disabled = true; $('#login-error').textContent = '';
-  try { await store.signIn(form.elements.email.value.trim(), form.elements.password.value); state = await store.load(); revision++; ready = true; $('#fatal-banner').hidden = true; form.reset(); render(); updateAccount(); $('#account-dialog').close(); toast('欢迎回到你们的小宇宙。'); }
+  loading = true; loadFailed = false; render();
+  try { await store.signIn(form.elements.email.value.trim(), form.elements.password.value); state = await store.load(); revision++; ready = true; loading = false; $('#fatal-banner').hidden = true; form.reset(); render(); updateAccount(); $('#account-dialog').close(); toast('欢迎回到你们的小宇宙。'); }
   catch (error) { $('#login-error').textContent = explain(error); }
-  finally { submit.disabled = false; }
+  finally { loading = false; render(); submit.disabled = false; }
 });
 $('#logout-button').addEventListener('click', async () => {
-  try { revision++; await store.signOut(); ready = false; state = newState(config.initialScore); render(); updateAccount(); $('#account-dialog').close(); toast('已退出登录。'); } catch (error) { toast(explain(error)); }
+  try { revision++; await store.signOut(); ready = false; loading = false; loadFailed = false; state = newState(config.initialScore); render(); updateAccount(); $('#account-dialog').close(); toast('已退出登录。'); } catch (error) { toast(explain(error)); }
 });
 $('#recovery-backup').addEventListener('click', () => { try { download(localStorage.getItem(STORAGE_KEY) || '{}', '小宇宙-原始记录.json'); } catch (error) { toast(explain(error)); } });
 $('#retry-button').addEventListener('click', () => location.reload());
@@ -295,8 +312,9 @@ async function initialize() {
   navigate(); render();
   try {
     if (Boolean(config.supabaseUrl) !== Boolean(config.supabasePublicKey)) throw new Error('同步配置不完整，请同时填写项目 URL 和公开 key。');
-    store = cloudConfigured ? await (await import('./cloud.js?v=2')).createCloudStore(config) : createLocalStore(config.initialScore);
+    store = cloudConfigured ? await (await import('./cloud.js?v=3')).createCloudStore(config) : createLocalStore(config.initialScore);
     if (!cloudConfigured || await store.session()) { state = await store.load(); ready = true; }
+    loading = false;
     render(); updateAccount();
     unsubscribe = store.subscribe(async () => {
       if (!ready || busy) return;

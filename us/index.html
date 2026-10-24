@@ -8,8 +8,8 @@
   <meta name="description" content="两个人的小宇宙，把在意的小事认真记下来。">
   <title>两个人的小宇宙</title>
   <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='18' fill='%23f3e0dd'/%3E%3Ctext x='32' y='46' text-anchor='middle' font-size='46' fill='%2394515f'%3E✦%3C/text%3E%3C/svg%3E">
-  <link rel="stylesheet" href="./styles.css?v=2">
-  <script type="module" src="./app.js?v=2"></script>
+  <link rel="stylesheet" href="./styles.css?v=3">
+  <script type="module" src="./app.js?v=3"></script>
 </head>
 <body>
   <a class="skip-link" href="#main">跳到主要内容</a>
@@ -20,33 +20,33 @@
       <button class="storage-status" id="account-button" type="button"><span class="status-dot"></span><span id="storage-label">本机记录</span></button>
     </header>
 
-    <main id="main">
+    <main id="main" aria-busy="true">
       <section id="page-home" class="page" aria-labelledby="home-title">
         <div class="page-heading home-heading"><div><p class="eyebrow">THE LITTLE THINGS MATTER</p><h1 id="home-title">今天，也认真喜欢你。</h1><p class="page-subtitle">把在意的小事，认真记下来。</p></div><div class="orbit-art" aria-hidden="true"><span class="orbit-heart">♡</span><span class="orbit-star">✦</span><span class="orbit-dot"></span></div></div>
         <div class="score-grid">
           <form class="score-card rose" data-person="her" novalidate>
             <div class="card-heading"><div class="person-avatar" aria-hidden="true">月</div><div><h2 data-direction="her">志炫 <span>→</span> 她</h2></div><span class="card-star" aria-hidden="true">✧</span></div>
             <div class="score-label"><span data-score-label="her">她的当前分数</span><span>满分 100</span></div>
-            <div class="score-value"><output data-score="her" aria-label="她的当前分数">80</output><span>分</span><span class="score-note" data-last="her">从今天开始，慢慢记录</span></div>
-            <div class="progress-track" role="progressbar" aria-label="她的分数进度" aria-valuemin="0" aria-valuemax="100" aria-valuenow="80" data-meter="her"><div class="progress-fill" style="width:80%"></div></div><div class="progress-ticks"><span>0</span><span>100</span></div>
+            <div class="score-value"><output data-score="her" aria-label="她的当前分数">—</output><span>分</span><span class="score-note" data-last="her">正在读取记录…</span></div>
+            <div class="progress-track" role="progressbar" aria-label="她的分数进度" aria-valuemin="0" aria-valuemax="100" aria-valuetext="正在读取记录…" data-meter="her"><div class="progress-fill" style="width:0%"></div></div><div class="progress-ticks"><span>0</span><span>100</span></div>
             <div class="form-divider"></div>
             <label for="delta-her">今天，你加分了吗<span class="label-hint">正数加分 · 负数减分</span></label>
-            <div class="delta-field"><span aria-hidden="true">±</span><input id="delta-her" name="delta" type="text" inputmode="text" maxlength="5" autocomplete="off" placeholder="例如 +5 或 -3" required aria-describedby="preview-her error-her"></div>
+            <div class="delta-field"><span aria-hidden="true">±</span><input id="delta-her" name="delta" disabled type="text" inputmode="text" maxlength="5" autocomplete="off" placeholder="例如 +5 或 -3" required aria-describedby="preview-her error-her"></div>
             <div class="delta-preview" id="preview-her" aria-live="polite">每一分，都值得被认真对待。</div>
-            <label for="reason-her">事由<span class="char-count" data-count="her">0 / 300</span></label><textarea id="reason-her" name="reason" maxlength="300" rows="3" placeholder="今天发生了什么，让你想记下这一笔……" required aria-describedby="error-her"></textarea>
-            <button class="submit-button" type="submit"><span>记下这一笔</span><span aria-hidden="true">↗</span></button><p class="field-error" id="error-her" role="alert"></p>
+            <label for="reason-her">事由<span class="char-count" data-count="her">0 / 300</span></label><textarea id="reason-her" name="reason" disabled maxlength="300" rows="3" placeholder="今天发生了什么，让你想记下这一笔……" required aria-describedby="error-her"></textarea>
+            <button class="submit-button" type="submit" disabled><span>正在读取…</span><span aria-hidden="true">↗</span></button><p class="field-error" id="error-her" role="alert"></p>
           </form>
           <form class="score-card sage" data-person="him" novalidate>
             <div class="card-heading"><div class="person-avatar" aria-hidden="true">星</div><div><h2 data-direction="him">她 <span>→</span> 志炫</h2></div><span class="card-star" aria-hidden="true">✧</span></div>
             <div class="score-label"><span data-score-label="him">志炫的当前分数</span><span>满分 100</span></div>
-            <div class="score-value"><output data-score="him" aria-label="志炫的当前分数">80</output><span>分</span><span class="score-note" data-last="him">从今天开始，慢慢记录</span></div>
-            <div class="progress-track" role="progressbar" aria-label="志炫的分数进度" aria-valuemin="0" aria-valuemax="100" aria-valuenow="80" data-meter="him"><div class="progress-fill" style="width:80%"></div></div><div class="progress-ticks"><span>0</span><span>100</span></div>
+            <div class="score-value"><output data-score="him" aria-label="志炫的当前分数">—</output><span>分</span><span class="score-note" data-last="him">正在读取记录…</span></div>
+            <div class="progress-track" role="progressbar" aria-label="志炫的分数进度" aria-valuemin="0" aria-valuemax="100" aria-valuetext="正在读取记录…" data-meter="him"><div class="progress-fill" style="width:0%"></div></div><div class="progress-ticks"><span>0</span><span>100</span></div>
             <div class="form-divider"></div>
             <label for="delta-him">今天，你加分了吗<span class="label-hint">正数加分 · 负数减分</span></label>
-            <div class="delta-field"><span aria-hidden="true">±</span><input id="delta-him" name="delta" type="text" inputmode="text" maxlength="5" autocomplete="off" placeholder="例如 +5 或 -3" required aria-describedby="preview-him error-him"></div>
+            <div class="delta-field"><span aria-hidden="true">±</span><input id="delta-him" name="delta" disabled type="text" inputmode="text" maxlength="5" autocomplete="off" placeholder="例如 +5 或 -3" required aria-describedby="preview-him error-him"></div>
             <div class="delta-preview" id="preview-him" aria-live="polite">每一分，都值得被认真对待。</div>
-            <label for="reason-him">事由<span class="char-count" data-count="him">0 / 300</span></label><textarea id="reason-him" name="reason" maxlength="300" rows="3" placeholder="今天发生了什么，让你想记下这一笔……" required aria-describedby="error-him"></textarea>
-            <button class="submit-button" type="submit"><span>记下这一笔</span><span aria-hidden="true">↗</span></button><p class="field-error" id="error-him" role="alert"></p>
+            <label for="reason-him">事由<span class="char-count" data-count="him">0 / 300</span></label><textarea id="reason-him" name="reason" disabled maxlength="300" rows="3" placeholder="今天发生了什么，让你想记下这一笔……" required aria-describedby="error-him"></textarea>
+            <button class="submit-button" type="submit" disabled><span>正在读取…</span><span aria-hidden="true">↗</span></button><p class="field-error" id="error-him" role="alert"></p>
           </form>
         </div>
       </section>
@@ -54,13 +54,13 @@
       <section id="page-history" class="page" aria-labelledby="history-title" hidden>
         <div class="page-heading"><div><p class="eyebrow">MOMENTS, KEPT WITH CARE</p><h1 id="history-title">每一分，都有一个故事。</h1><p class="page-subtitle">那些细小的在意，我们都记得。</p></div><span class="heading-symbol" aria-hidden="true">✧</span></div>
         <div class="section-toolbar"><div class="segmented" role="group" aria-label="评分方向"><button type="button" data-history-person="her" aria-pressed="true">志炫 → 她</button><button type="button" data-history-person="him" aria-pressed="false">她 → 志炫</button></div><span class="toolbar-note" id="history-count">0 条记录</span></div>
-        <div class="history-panel"><div class="history-summary"><span id="history-direction">志炫给她的评分记录</span><span>当前 <strong id="history-score">80</strong> / 100</span></div><div id="history-list"></div><button id="more-records" class="text-button" type="button" hidden>再看一些记录 ↓</button></div>
+        <div class="history-panel"><div class="history-summary"><span id="history-direction">志炫给她的评分记录</span><span>当前 <strong id="history-score">—</strong> / 100</span></div><div id="history-list"></div><button id="more-records" class="text-button" type="button" hidden>再看一些记录 ↓</button></div>
       </section>
 
       <section id="page-stats" class="page" aria-labelledby="stats-title" hidden>
         <div class="page-heading"><div><p class="eyebrow">A LITTLE CLOSER, EVERY DAY</p><h1 id="stats-title">我们的分数轨迹。</h1><p class="page-subtitle">沿着时间，看看一起走过的日常。</p></div><span class="heading-symbol" aria-hidden="true">⌁</span></div>
         <div class="section-toolbar"><div class="segmented" role="group" aria-label="统计时间范围"><button type="button" data-range="7" aria-pressed="false">最近 7 天</button><button type="button" data-range="30" aria-pressed="true">最近 30 天</button><button type="button" data-range="all" aria-pressed="false">全部</button></div><span class="toolbar-note" id="chart-dates"></span></div>
-        <div class="chart-panel"><div class="chart-heading"><h2>分数随时间的变化</h2><div class="chart-legend"><button type="button" data-series="her" aria-pressed="true"><span class="legend-line rose-line"></span><span data-legend="her">她的分数</span></button><button type="button" data-series="him" aria-pressed="true"><span class="legend-line sage-line"></span><span data-legend="him">志炫的分数</span></button></div></div><div id="chart-container"><svg id="score-chart" role="img" aria-label="双方分数随时间变化的折线图，纵轴范围 0 至 100 分"></svg><div id="chart-tooltip" role="status" hidden></div></div><p class="chart-caption" id="chart-caption">从 80 分出发，第一笔小事会成为轨迹的起点。</p></div>
+        <div class="chart-panel"><div class="chart-heading"><h2>分数随时间的变化</h2><div class="chart-legend"><button type="button" data-series="her" aria-pressed="true"><span class="legend-line rose-line"></span><span data-legend="her">她的分数</span></button><button type="button" data-series="him" aria-pressed="true"><span class="legend-line sage-line"></span><span data-legend="him">志炫的分数</span></button></div></div><div id="chart-container"><svg id="score-chart" role="img" aria-label="双方分数随时间变化的折线图，纵轴范围 0 至 100 分"></svg><div id="chart-tooltip" role="status" hidden></div></div><p class="chart-caption" id="chart-caption">正在读取记录…</p></div>
         <div class="stats-grid" id="stats-summary"></div><p class="stats-footnote">累计加分、累计减分和净变化仅统计未撤销的评分；撤销记录保留在记录页和分数轨迹中。</p>
       </section>
     </main>

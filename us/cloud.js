@@ -1,4 +1,4 @@
-import { validateState } from './model.js?v=2';
+import { validateState } from './model.js?v=3';
 
 export async function createCloudStore(config) {
   const { createClient } = await import('https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/+esm');
