@@ -1,6 +1,6 @@
-import { config } from './config.js?v=1';
-import { newState, scoreFor, validateState, dayKey, rangeStart, summarize, chartSeries } from './model.js?v=1';
-import { createLocalStore, STORAGE_KEY } from './storage.js?v=1';
+import { config } from './config.js?v=2';
+import { newState, scoreFor, validateState, dayKey, rangeStart, summarize, chartSeries } from './model.js?v=2';
+import { createLocalStore, STORAGE_KEY } from './storage.js?v=2';
 
 const $ = selector => document.querySelector(selector);
 const $$ = selector => [...document.querySelectorAll(selector)];
@@ -295,7 +295,7 @@ async function initialize() {
   navigate(); render();
   try {
     if (Boolean(config.supabaseUrl) !== Boolean(config.supabasePublicKey)) throw new Error('同步配置不完整，请同时填写项目 URL 和公开 key。');
-    store = cloudConfigured ? await (await import('./cloud.js?v=1')).createCloudStore(config) : createLocalStore(config.initialScore);
+    store = cloudConfigured ? await (await import('./cloud.js?v=2')).createCloudStore(config) : createLocalStore(config.initialScore);
     if (!cloudConfigured || await store.session()) { state = await store.load(); ready = true; }
     render(); updateAccount();
     unsubscribe = store.subscribe(async () => {

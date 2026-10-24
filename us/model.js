@@ -68,7 +68,10 @@ export function rangeStart(range, state, now = Date.now(), timeZone = 'Asia/Shan
 }
 
 export function summarize(state, person, since = -Infinity) {
-  const rows = state.records.filter(r => r.person === person && Date.parse(r.createdAt) >= since);
+  // Resolve cancellations before filtering by date: an undo never becomes a new
+  // positive/negative event, even when the original is outside the selected range.
+  const undone = new Set(state.records.filter(r => r.undoOf).map(r => r.undoOf));
+  const rows = state.records.filter(r => r.person === person && !r.undoOf && !undone.has(r.id) && Date.parse(r.createdAt) >= since);
   return { plus: rows.reduce((n, r) => n + Math.max(0, r.delta), 0), minus: rows.reduce((n, r) => n + Math.max(0, -r.delta), 0), net: rows.reduce((n, r) => n + r.delta, 0), count: rows.length };
 }
 

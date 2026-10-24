@@ -1,4 +1,4 @@
-import { newState, validateState, appendRecord, reverseRecord } from './model.js?v=1';
+import { newState, validateState, appendRecord, reverseRecord } from './model.js?v=2';
 
 export const STORAGE_KEY = 'our-little-universe:v1';
 

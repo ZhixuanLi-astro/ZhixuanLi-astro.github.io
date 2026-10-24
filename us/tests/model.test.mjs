@@ -1,6 +1,6 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import { newState, appendRecord, reverseRecord, scoreFor, validateState, chartSeries, rangeStart, dayKey } from '../model.js';
+import { newState, appendRecord, reverseRecord, scoreFor, validateState, chartSeries, rangeStart, dayKey, summarize } from '../model.js';
 
 const base = () => newState(80, '2026-10-01T00:00:00.000Z');
 const add = (state, delta, person = 'her', extra = {}) => appendRecord(state, { person, delta, reason: '一个小小的日常', createdAt: '2026-10-02T10:00:00.000Z', ...extra });
@@ -55,4 +55,43 @@ test('calendar ranges use Shanghai dates around midnight', () => {
   const now = Date.parse('2026-10-23T17:00:00Z'); assert.equal(dayKey(now), '2026-10-24');
   assert.equal(rangeStart('7', base(), now), Date.parse('2026-10-17T16:00:00Z'));
   assert.equal(rangeStart('all', base(), now), Date.parse(base().createdAt));
+});
+
+test('undoing a positive entry removes only its original addition from totals', () => {
+  let state = add(base(), 8);
+  const cancelled = state.records[0].id;
+  state = add(state, -3);
+  state = add(state, 2);
+  state = add(state, 4, 'him');
+  state = reverseRecord(state, cancelled);
+  assert.deepEqual(summarize(state, 'her'), { plus: 2, minus: 3, net: -1, count: 2 });
+  assert.deepEqual(summarize(state, 'him'), { plus: 4, minus: 0, net: 4, count: 1 });
+  assert.equal(scoreFor(state, 'her'), 79);
+  assert.equal(state.records.length, 5);
+  assert.equal(state.records.at(-1).undoOf, cancelled);
+});
+
+test('undoing a negative entry removes only its original deduction from totals', () => {
+  let state = add(base(), -7);
+  const cancelled = state.records[0].id;
+  state = add(state, 4);
+  state = add(state, -2);
+  state = reverseRecord(state, cancelled);
+  assert.deepEqual(summarize(state, 'her'), { plus: 4, minus: 2, net: 2, count: 2 });
+  assert.equal(scoreFor(state, 'her'), 82);
+  assert.equal(state.records.length, 4);
+});
+
+test('a recent undo of an older entry does not count as a deduction in that period', () => {
+  let state = add(base(), 8);
+  const cancelled = state.records[0].id;
+  state = add(state, 3, 'her', { createdAt: '2026-10-20T10:00:00Z' });
+  state = reverseRecord(state, cancelled, { createdAt: '2026-10-24T10:00:00Z' });
+  const since = Date.parse('2026-10-18T00:00:00Z');
+  assert.deepEqual(summarize(state, 'her', since), { plus: 3, minus: 0, net: 3, count: 1 });
+  assert.deepEqual(summarize(state, 'her', Date.parse('2026-10-23T00:00:00Z')), { plus: 0, minus: 0, net: 0, count: 0 });
+  const points = chartSeries(state, 'her', since, Date.parse('2026-10-25T00:00:00Z'));
+  assert.equal(points[0].score, 88);
+  assert.equal(points.at(-1).score, 83);
+  assert.ok(points.some(p => p.record?.undoOf === cancelled));
 });
