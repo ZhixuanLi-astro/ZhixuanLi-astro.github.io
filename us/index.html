@@ -1,0 +1,77 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#f8f5ef">
+  <meta name="robots" content="noindex, nofollow">
+  <meta name="description" content="两个人的小宇宙，把在意的小事认真记下来。">
+  <title>两个人的小宇宙</title>
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='18' fill='%23f3e0dd'/%3E%3Ctext x='32' y='46' text-anchor='middle' font-size='46' fill='%2394515f'%3E✦%3C/text%3E%3C/svg%3E">
+  <link rel="stylesheet" href="./styles.css?v=1">
+  <script type="module" src="./app.js?v=1"></script>
+</head>
+<body>
+  <a class="skip-link" href="#main">跳到主要内容</a>
+  <div class="app-shell">
+    <header class="site-header">
+      <a class="brand" href="#home" aria-label="两个人的小宇宙，首页"><span class="brand-mark" aria-hidden="true">✧</span><span>两个人的小宇宙<small>OUR LITTLE UNIVERSE</small></span></a>
+      <nav class="main-nav" aria-label="页面导航"><a href="#home" data-page="home" aria-current="page">记一笔</a><a href="#history" data-page="history">我们的记录</a><a href="#stats" data-page="stats">分数轨迹</a></nav>
+      <button class="storage-status" id="account-button" type="button"><span class="status-dot"></span><span id="storage-label">本机记录</span></button>
+    </header>
+
+    <main id="main">
+      <section id="page-home" class="page" aria-labelledby="home-title">
+        <div class="page-heading home-heading"><div><p class="eyebrow">THE LITTLE THINGS MATTER</p><h1 id="home-title">今天，也认真喜欢你。</h1><p class="page-subtitle">把在意的小事，认真记下来。</p></div><div class="orbit-art" aria-hidden="true"><span class="orbit-heart">♡</span><span class="orbit-star">✦</span><span class="orbit-dot"></span></div></div>
+        <div class="score-grid">
+          <form class="score-card rose" data-person="her" novalidate>
+            <div class="card-heading"><div class="person-avatar" aria-hidden="true">月</div><div><h2 data-direction="her">志炫 <span>→</span> 她</h2><p>给她的每一分，都有理由</p></div><span class="card-star" aria-hidden="true">✧</span></div>
+            <div class="score-label"><span data-score-label="her">她的当前分数</span><span>满分 100</span></div>
+            <div class="score-value"><output data-score="her" aria-label="她的当前分数">80</output><span>分</span><span class="score-note" data-last="her">从今天开始，慢慢记录</span></div>
+            <div class="progress-track" role="progressbar" aria-label="她的分数进度" aria-valuemin="0" aria-valuemax="100" aria-valuenow="80" data-meter="her"><div class="progress-fill" style="width:80%"></div></div><div class="progress-ticks"><span>0</span><span>100</span></div>
+            <div class="form-divider"></div>
+            <label for="delta-her">这次，加减多少分？<span class="label-hint">正数加分 · 负数减分</span></label>
+            <div class="delta-field"><span aria-hidden="true">±</span><input id="delta-her" name="delta" type="text" inputmode="text" maxlength="5" autocomplete="off" placeholder="例如 +5 或 -3" required aria-describedby="preview-her error-her"></div>
+            <div class="delta-preview" id="preview-her" aria-live="polite">每一分，都值得被认真对待。</div>
+            <label for="reason-her">因为什么小事？<span class="char-count" data-count="her">0 / 300</span></label><textarea id="reason-her" name="reason" maxlength="300" rows="3" placeholder="今天发生了什么，让你想记下这一笔……" required aria-describedby="error-her"></textarea>
+            <button class="submit-button" type="submit"><span>记下这一笔</span><span aria-hidden="true">↗</span></button><p class="field-error" id="error-her" role="alert"></p>
+          </form>
+          <form class="score-card sage" data-person="him" novalidate>
+            <div class="card-heading"><div class="person-avatar" aria-hidden="true">星</div><div><h2 data-direction="him">她 <span>→</span> 志炫</h2><p>给他的每一分，都有理由</p></div><span class="card-star" aria-hidden="true">✧</span></div>
+            <div class="score-label"><span data-score-label="him">志炫的当前分数</span><span>满分 100</span></div>
+            <div class="score-value"><output data-score="him" aria-label="志炫的当前分数">80</output><span>分</span><span class="score-note" data-last="him">从今天开始，慢慢记录</span></div>
+            <div class="progress-track" role="progressbar" aria-label="志炫的分数进度" aria-valuemin="0" aria-valuemax="100" aria-valuenow="80" data-meter="him"><div class="progress-fill" style="width:80%"></div></div><div class="progress-ticks"><span>0</span><span>100</span></div>
+            <div class="form-divider"></div>
+            <label for="delta-him">这次，加减多少分？<span class="label-hint">正数加分 · 负数减分</span></label>
+            <div class="delta-field"><span aria-hidden="true">±</span><input id="delta-him" name="delta" type="text" inputmode="text" maxlength="5" autocomplete="off" placeholder="例如 +5 或 -3" required aria-describedby="preview-him error-him"></div>
+            <div class="delta-preview" id="preview-him" aria-live="polite">每一分，都值得被认真对待。</div>
+            <label for="reason-him">因为什么小事？<span class="char-count" data-count="him">0 / 300</span></label><textarea id="reason-him" name="reason" maxlength="300" rows="3" placeholder="今天发生了什么，让你想记下这一笔……" required aria-describedby="error-him"></textarea>
+            <button class="submit-button" type="submit"><span>记下这一笔</span><span aria-hidden="true">↗</span></button><p class="field-error" id="error-him" role="alert"></p>
+          </form>
+        </div>
+      </section>
+
+      <section id="page-history" class="page" aria-labelledby="history-title" hidden>
+        <div class="page-heading"><div><p class="eyebrow">MOMENTS, KEPT WITH CARE</p><h1 id="history-title">每一分，都有一个故事。</h1><p class="page-subtitle">那些细小的在意，我们都记得。</p></div><span class="heading-symbol" aria-hidden="true">✧</span></div>
+        <div class="section-toolbar"><div class="segmented" role="group" aria-label="评分方向"><button type="button" data-history-person="her" aria-pressed="true">志炫 → 她</button><button type="button" data-history-person="him" aria-pressed="false">她 → 志炫</button></div><span class="toolbar-note" id="history-count">0 条记录</span></div>
+        <div class="history-panel"><div class="history-summary"><span id="history-direction">志炫给她的评分记录</span><span>当前 <strong id="history-score">80</strong> / 100</span></div><div id="history-list"></div><button id="more-records" class="text-button" type="button" hidden>再看一些记录 ↓</button></div>
+      </section>
+
+      <section id="page-stats" class="page" aria-labelledby="stats-title" hidden>
+        <div class="page-heading"><div><p class="eyebrow">A LITTLE CLOSER, EVERY DAY</p><h1 id="stats-title">我们的分数轨迹。</h1><p class="page-subtitle">沿着时间，看看一起走过的日常。</p></div><span class="heading-symbol" aria-hidden="true">⌁</span></div>
+        <div class="section-toolbar"><div class="segmented" role="group" aria-label="统计时间范围"><button type="button" data-range="7" aria-pressed="false">最近 7 天</button><button type="button" data-range="30" aria-pressed="true">最近 30 天</button><button type="button" data-range="all" aria-pressed="false">全部</button></div><span class="toolbar-note" id="chart-dates"></span></div>
+        <div class="chart-panel"><div class="chart-heading"><h2>分数随时间的变化</h2><div class="chart-legend"><button type="button" data-series="her" aria-pressed="true"><span class="legend-line rose-line"></span><span data-legend="her">她的分数</span></button><button type="button" data-series="him" aria-pressed="true"><span class="legend-line sage-line"></span><span data-legend="him">志炫的分数</span></button></div></div><div id="chart-container"><svg id="score-chart" role="img" aria-label="双方分数随时间变化的折线图，纵轴范围 0 至 100 分"></svg><div id="chart-tooltip" role="status" hidden></div></div><p class="chart-caption" id="chart-caption">从 80 分出发，第一笔小事会成为轨迹的起点。</p></div>
+        <div class="stats-grid" id="stats-summary"></div><p class="stats-footnote">统计包含撤销时产生的抵消分数，与你们实际走过的轨迹保持一致。</p>
+      </section>
+    </main>
+    <footer class="site-footer"><p><span aria-hidden="true">✦</span> 属于我们的，细小而闪亮的日常。</p><div><button id="backup-button" type="button">备份记录</button><span aria-hidden="true">·</span><button id="import-button" type="button">导入备份</button><span aria-hidden="true">·</span><a href="../">返回主站</a></div><p class="storage-footnote" id="storage-footnote">记录保存在当前浏览器，请定期备份。</p></footer>
+  </div>
+
+  <dialog id="account-dialog" aria-labelledby="account-title"><button class="dialog-close" type="button" data-close aria-label="关闭">×</button><p class="eyebrow">JUST FOR THE TWO OF YOU</p><h2 id="account-title">我们的小空间</h2><div id="local-description"><p>现在是本机记录模式。记录保存在当前设备的浏览器中，不会自动同步到另一台手机。</p><p>换设备前先备份，再到另一台设备用「导入备份」继续记录。</p><button class="button-primary" id="dialog-backup" type="button">备份我的记录</button></div><form id="login-form" hidden><p>登录后，就能看到属于你们两个人的记录。</p><label for="login-email">邮箱</label><input id="login-email" name="email" type="email" autocomplete="username" required><label for="login-password">密码</label><input id="login-password" name="password" type="password" autocomplete="current-password" required><button class="button-primary" type="submit">进入我们的小宇宙</button><p id="login-error" class="field-error" role="alert"></p></form><div id="signed-in" hidden><p id="signed-in-name"></p><p>记录会同步到你们的共同空间。</p><button class="button-secondary" id="logout-button" type="button">退出登录</button></div></dialog>
+  <dialog id="confirm-dialog" aria-labelledby="confirm-title"><h2 id="confirm-title">确认操作</h2><p id="confirm-text"></p><div class="dialog-actions"><button class="button-secondary" type="button" id="confirm-cancel">先不操作</button><button class="button-primary" type="button" id="confirm-ok">确认</button></div></dialog>
+  <input id="import-file" type="file" accept="application/json,.json" hidden>
+  <div class="toast" id="toast" role="status" hidden></div>
+  <div class="fatal-banner" id="fatal-banner" role="alert" hidden><p id="fatal-message"></p><button id="recovery-backup" type="button">下载原始记录</button><button id="retry-button" type="button">重新加载</button></div>
+  <noscript><p class="noscript-note">请开启 JavaScript，以使用评分、记录和图表功能。</p></noscript>
+</body>
+</html>
